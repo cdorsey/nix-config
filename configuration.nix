@@ -67,6 +67,7 @@ in
       sccache
       jq
       yq
+      sops
     ];
   };
 
