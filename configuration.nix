@@ -54,6 +54,8 @@ in
       zoxide
       zellij
       sccache
+      jq
+      yq
     ];
   };
 
