@@ -8,19 +8,21 @@
 { config, lib, pkgs, ... }:
 let
   nixosSwitch = pkgs.writeScriptBin "nixos-switch" ''
+    set -e
+
     if [[ $PWD != ~/.dotfiles ]]; then
       exit 0
     fi
 
-    git diff --quiet --ignore-all-space -- home.nix
-    if [[ $? -ne 0 ]]; then
+    
+    if ! git diff --quiet --ignore-all-space -- home.nix; then
       home-manager switch --flake .
       git add home.nix
       git commit -m "$(home-manager generations | head -n1)"
     fi
 
-    git diff --quiet --ignore-all-space -- *.nix
-    if [[ $? -ne 0 ]]; then
+    
+    if ! git diff --quiet --ignore-all-space -- *.nix; then
       sudo nixos-rebuild switch --flake .
       git add *.nix
       git commit -m "$(nixos-rebuild list-generations 2>/dev/null | grep current)"
