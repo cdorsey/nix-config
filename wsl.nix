@@ -1,6 +1,6 @@
 # WSL configuration
 
-{ lib, inputs, ... }:
+{ lib, inputs, pkgs, config, ... }:
 
 with lib;
 {
@@ -12,19 +12,35 @@ with lib;
     enable = true;
 
     defaultUser = "nixos";
-    wslConf.automount.root = "/mnt";
-    docker-desktop.enable = true;
+    nativeSystemd = true;
+    docker-desktop.enable = false;
+
+    wslConf = {
+      automount.root = "/mnt";
+      network.generateResolvConf = true;
+      interop.enabled = true;
+    };
+
+    extraBin = with pkgs; [
+      # Binaries for Docker Desktop wsl-distro-proxy
+      { src = "${coreutils}/bin/mkdir"; }
+      { src = "${coreutils}/bin/cat"; }
+      { src = "${coreutils}/bin/whoami"; }
+      { src = "${coreutils}/bin/ls"; }
+      { src = "${busybox}/bin/addgroup"; }
+      { src = "${su}/bin/groupadd"; }
+      { src = "${su}/bin/usermod"; }
+    ];
   };
 
   # WSL is closer to a container than anything else
   boot.isContainer = true;
 
-  networking.hostName = "wsl";
-
   environment.etc.hosts.enable = false;
   environment.etc."resolv.conf".enable = false;
 
   networking.dhcpcd.enable = false;
+  networking.hostName = "wsl";
 
   users.users.root = {
     # Otherwise WSL fails to login as root with "initgroups failed 5"
@@ -42,6 +58,8 @@ with lib;
   systemd.services.firewall.enable = false;
   systemd.services.systemd-resolved.enable = false;
   systemd.services.systemd-udevd.enable = false;
+
+  systemd.services.docker-desktop-proxy.script = lib.mkForce ''${config.wsl.wslConf.automount.root}/wsl/docker-desktop/docker-desktop-user-distro proxy --docker-desktop-root ${config.wsl.wslConf.automount.root}/wsl/docker-desktop "C:\Program Files\Docker\Docker\resources"'';
 
   # Don't allow emergency mode, because we don't have a console.
   systemd.enableEmergencyMode = false;

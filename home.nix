@@ -27,9 +27,11 @@
       http = "xh";
       https = "xh -s";
 
-      nixos-test = "nixos-rebuild test --flake ~/.dotfiles";
-      nixos-switch = "nixos-rebuild switch --flake ~/.dotfiles";
+      nixos-test = "sudo nixos-rebuild test --flake ~/.dotfiles";
+      nixos-switch = "sudo nixos-rebuild switch --flake ~/.dotfiles";
       hm-switch = "home-manager switch --flake ~/.dotfiles";
+
+      #docker = "/run/current-system/sw/bin/docker";
     };
   };
 
@@ -84,7 +86,7 @@
         };
       };
       theme = "tokyo-night";
-      mouse_mode = false;
+      mouse_mode = true;
     };
   };
 
