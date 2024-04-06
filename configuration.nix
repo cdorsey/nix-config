@@ -6,9 +6,28 @@
 # https://github.com/nix-community/NixOS-WSL
 
 { config, lib, pkgs, ... }:
+let
+  nixosSwitch = pkgs.writeScriptBin "nixos-switch" ''
+    if [[ $PWD != ~/.dotfiles ]]; then
+      exit 0
+    fi
 
+    git diff --quiet --ignore-all-space -- home.nix
+    if [[ $? -ne 0 ]]; then
+      home-manager switch --flake .
+      git add home.nix
+      git commit -m "$(home-manager generations | head -n1)"
+    fi
+
+    git diff --quiet --ignore-all-space -- *.nix
+    if [[ $? -ne 0 ]]; then
+      sudo nixos-rebuild switch --flake .
+      git add *.nix
+      git commit -m "$(nixos-rebuild list-generations 2>/dev/null | grep current)"
+    fi
+  '';
+in
 {
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   programs.nix-ld = {
@@ -20,6 +39,8 @@
 
   environment = {
     systemPackages = with pkgs; [
+      nixosSwitch
+
       wget
       vim-full
       rustup
