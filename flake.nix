@@ -15,29 +15,35 @@
     };
 
     vscode-server.url = "github:nix-community/nixos-vscode-server";
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpgks.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, vscode-server, ... }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in
-    {
-      nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {inherit inputs; };
-        modules = [
-          vscode-server.nixosModules.default
-          ./wsl.nix
-          ./configuration.nix
-          ./hardware-configuration.nix
-        ];
-      };
-
-      homeConfigurations.nixos = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = { rootDir = ./.; };
-        modules = [ ./home.nix ];
-      };
+  outputs = { self, nixpkgs, ... }@inputs:
+  let
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+  in
+  {
+    nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = { inherit inputs; };
+      modules = [
+        inputs.vscode-server.nixosModules.default
+        inputs.sops-nix.nixosModules.sops
+        ./wsl.nix
+        ./configuration.nix
+        ./hardware-configuration.nix
+      ];
     };
+
+    homeConfigurations.nixos = inputs.home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+      extraSpecialArgs = { rootDir = ./.; };
+      modules = [ ./home.nix ];
+    };
+  };
 }

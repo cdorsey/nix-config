@@ -30,6 +30,17 @@ in
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  sops = {
+    defaultSopsFile = ./secrets/secrets.yaml;
+    defaultSopsFormat = "yaml";
+
+    age.keyFile = "/var/secrets/age/keys.txt";
+
+    secrets = {
+      hello = {};
+    };
+  };
+
   programs.nix-ld = {
     enable = true;
     libraries = with pkgs; [
