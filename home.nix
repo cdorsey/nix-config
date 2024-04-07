@@ -2,6 +2,7 @@
 let
   inherit (nix-colors.lib-contrib { inherit pkgs; }) vimThemeFromScheme;
   inherit (nix-colors.lib-contrib { inherit pkgs; }) shellThemeFromScheme;
+  inherit (nix-colors.lib-contrib { inherit pkgs; }) textMateThemeFromScheme;
 in {
   home.username = "nixos";
   home.homeDirectory = "/home/nixos";
@@ -49,7 +50,11 @@ in {
       (vimThemeFromScheme { scheme = config.colorScheme; })
     ];
 
-    extraConfig = "colorscheme nix-${config.colorScheme.slug}";
+    extraConfig = ''
+      colorscheme nix-${config.colorScheme.slug}
+
+      let g:airline_theme='nix_${config.colorScheme.slug}'
+    '';
   };
 
   programs.git = {
@@ -109,6 +114,13 @@ in {
 
     enableZshIntegration = true;
     options = ["--cmd" "cd"];
+  };
+
+  programs.bat = {
+    enable = true;
+
+    config.theme = "default";
+    themes.default.src = textMateThemeFromScheme { scheme = config.colorScheme; };
   };
 
   home.file = {
