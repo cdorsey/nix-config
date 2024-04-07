@@ -10,7 +10,7 @@ in pkgs.writeShellScriptBin "nixos-switch" ''
     exit 0
   fi
 
-  ${nixfmt} $(${git} diff --name-only -- ./**/*.nix)
+  ${nixfmt} $(${git} ls-files -m -x *.nix)
 
   # Update the user config if needed
   if ! ${git} diff --quiet --ignore-all-space -- user/**/*.nix; then
