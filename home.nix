@@ -21,7 +21,7 @@ in {
 
       theme = "custom";
       custom = "${rootDir}/oh-my-zsh";
-      plugins = ["git" "node" "docker" "docker-compose"];
+      plugins = ["git" "node" "docker-compose"];
     };
 
     shellAliases = {
