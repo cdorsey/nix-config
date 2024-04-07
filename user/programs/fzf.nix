@@ -1,11 +1,8 @@
 { lib, config, ... }:
 with lib;
-let
-  cfg = config.userConfig.fzf;
+let cfg = config.userConfig.fzf;
 in {
-  options.userConfig.fzf = {
-    enable = mkEnableOption {};
-  };
+  options.userConfig.fzf = { enable = mkEnableOption { }; };
 
   config.programs.fzf = {
     enable = cfg.enable;

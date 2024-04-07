@@ -5,10 +5,10 @@ let
   cfg = config.userConfig.vim;
 in {
   options.userConfig.vim = {
-    enable = mkEnableOption {};
+    enable = mkEnableOption { };
     plugins = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
     };
   };
 
@@ -16,13 +16,14 @@ in {
     enable = cfg.enable;
 
     defaultEditor = true;
-    plugins = with pkgs.vimPlugins; [
-      vim-surround
-      vim-nix
-      vim-airline
-      vim-airline-themes
-      (vimThemeFromScheme { scheme = config.colorScheme; })
-    ] ++ cfg.plugins;
+    plugins = with pkgs.vimPlugins;
+      [
+        vim-surround
+        vim-nix
+        vim-airline
+        vim-airline-themes
+        (vimThemeFromScheme { scheme = config.colorScheme; })
+      ] ++ cfg.plugins;
 
     extraConfig = ''
       colorscheme nix-${config.colorScheme.slug}

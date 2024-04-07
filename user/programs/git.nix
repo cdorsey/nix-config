@@ -1,15 +1,10 @@
 { lib, config, ... }:
-let
-  cfg = config.userConfig.git;
+let cfg = config.userConfig.git;
 in {
   options.userConfig.git = {
-    enable = lib.mkEnableOption {};
-    userEmail = lib.mkOption {
-      type = lib.types.str;
-    };
-    userName = lib.mkOption {
-      type = lib.types.str;
-    };
+    enable = lib.mkEnableOption { };
+    userEmail = lib.mkOption { type = lib.types.str; };
+    userName = lib.mkOption { type = lib.types.str; };
   };
 
   config.programs.git = {
@@ -18,8 +13,6 @@ in {
     userEmail = cfg.userEmail;
     userName = cfg.userName;
 
-    extraConfig = {
-      init.defaultBranch = "main";
-    };
+    extraConfig = { init.defaultBranch = "main"; };
   };
 }

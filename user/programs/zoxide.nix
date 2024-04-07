@@ -1,10 +1,9 @@
 { lib, config, ... }:
 with lib;
-let
-  cfg = config.userConfig.zoxide;
+let cfg = config.userConfig.zoxide;
 in {
   options.userConfig.zoxide = {
-    enable = mkEnableOption {};
+    enable = mkEnableOption { };
     useCd = mkOption {
       type = types.bool;
       default = true;
@@ -17,8 +16,6 @@ in {
       enableZshIntegration = config.userConfig.zsh.enable;
     })
 
-    (mkIf cfg.useCd {
-      options = ["--cmd" "cd"];
-    })
+    (mkIf cfg.useCd { options = [ "--cmd" "cd" ]; })
   ];
 }

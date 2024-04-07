@@ -5,10 +5,10 @@ let
   cfg = config.userConfig.zsh;
 in {
   options.userConfig.zsh = {
-    enable = mkEnableOption {};
+    enable = mkEnableOption { };
     plugins = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
     };
   };
 

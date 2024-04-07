@@ -1,10 +1,9 @@
 { lib, config, pkgs, nix-colors, ... }:
 with lib;
-let
-  cfg = config.userConfig.zellij;
+let cfg = config.userConfig.zellij;
 in {
   options.userConfig.zellij = {
-    enable = mkEnableOption {};
+    enable = mkEnableOption { };
     autoAttach = mkOption {
       type = types.bool;
       default = true;
