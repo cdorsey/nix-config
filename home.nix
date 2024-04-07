@@ -54,7 +54,7 @@ in {
     extraConfig = ''
       colorscheme nix-${config.colorScheme.slug}
 
-      let g:airline_theme='base16color'
+      let g:airline_theme='base16_colors'
     '';
   };
 
