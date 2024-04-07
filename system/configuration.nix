@@ -5,8 +5,7 @@
 # NixOS-WSL specific options are documented on the NixOS-WSL repository:
 # https://github.com/nix-community/NixOS-WSL
 
-{ config, lib, pkgs, ... }:
-{
+{ config, lib, pkgs, ... }: {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   sops = {
@@ -15,49 +14,45 @@
 
     age.keyFile = "/var/secrets/age/keys.txt";
 
-    secrets = {
-      hello = {};
-    };
+    secrets = { hello = { }; };
   };
 
   programs.nix-ld = {
     enable = true;
-    libraries = with pkgs; [
+    libraries = with pkgs;
+      [
 
-    ];
+      ];
   };
 
   environment = {
-    systemPackages = with pkgs; [
-      wget
-      vim-full
-      rustup
-      bun
-      python3
-      xh
-      bat
-      eza
-      ripgrep
-      fzf
-      zoxide
-      zellij
-      sccache
-      jq
-      yq
-      sops
-      nixfmt
-    ] ++ [
-      (import ./scripts/nixos-switch.nix { inherit pkgs; })
-    ];
+    systemPackages = with pkgs;
+      [
+        wget
+        vim-full
+        rustup
+        bun
+        python3
+        xh
+        bat
+        eza
+        ripgrep
+        fzf
+        zoxide
+        zellij
+        sccache
+        jq
+        yq
+        sops
+        nixfmt
+      ] ++ [ (import ./scripts/nixos-switch.nix { inherit pkgs; }) ];
   };
 
   programs.zsh.enable = true;
 
   services.vscode-server.enable = true;
 
-  users = {
-    defaultUserShell = pkgs.zsh;
-  };
+  users = { defaultUserShell = pkgs.zsh; };
 
   time.timeZone = "US/Central";
 

@@ -1,6 +1,7 @@
 { pkgs, ... }:
 let
   git = "${pkgs.git}/bin/git";
+  nixfmt = "${pkgs.nixfmt}/bin/nixfmt";
 in pkgs.writeShellScriptBin "nixos-switch" ''
   set -e
 
@@ -8,6 +9,8 @@ in pkgs.writeShellScriptBin "nixos-switch" ''
   if [[ $PWD != ~/.dotfiles ]]; then
     exit 0
   fi
+
+  ${nixfmt} $(${git} diff --name-only -- ./**/*.nix)
 
   # Update the user config if needed
   if ! ${git} diff --quiet --ignore-all-space -- user/**/*.nix; then

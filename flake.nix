@@ -25,37 +25,35 @@
     };
 
     # https://github.com/Misterio77/nix-colors/pull/53
-    nix-colors.url = "github:misterio77/nix-colors/d1a0aeae920bb10814645ba0f8489f8c74756507";
+    nix-colors.url =
+      "github:misterio77/nix-colors/d1a0aeae920bb10814645ba0f8489f8c74756507";
   };
 
   outputs = { self, nixpkgs, nix-colors, ... }@inputs:
-  let
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
-  in
-  {
-    nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
-      inherit system;
-      specialArgs = { inherit inputs; };
-      modules = [
-        inputs.vscode-server.nixosModules.default
-        inputs.sops-nix.nixosModules.sops
-        ./system/wsl.nix
-        ./system/configuration.nix
-        ./system/hardware-configuration.nix
-      ];
-    };
-
-    homeConfigurations.nixos = inputs.home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      extraSpecialArgs = {
-        inherit nix-colors;
-        rootDir = ./.;
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs; };
+        modules = [
+          inputs.vscode-server.nixosModules.default
+          inputs.sops-nix.nixosModules.sops
+          ./system/wsl.nix
+          ./system/configuration.nix
+          ./system/hardware-configuration.nix
+        ];
       };
-      modules = [
-        nix-colors.homeManagerModules.default
-        ./user/home.nix
-      ];
+
+      homeConfigurations.nixos =
+        inputs.home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = {
+            inherit nix-colors;
+            rootDir = ./.;
+          };
+          modules = [ nix-colors.homeManagerModules.default ./user/home.nix ];
+        };
     };
-  };
 }
