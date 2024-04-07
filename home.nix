@@ -89,7 +89,7 @@ in {
           fg = "#${base06}";
           bg = "#${base00}";
           black = "#${base00}";
-          white = "#${base07}";
+          white = "#${base06}";
           red = "#${base08}";
           orange = "#${base09}";
           yellow = "#${base0A}";
