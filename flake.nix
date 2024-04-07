@@ -24,6 +24,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # https://github.com/Misterio77/nix-colors/pull/53
     nix-colors.url = "github:misterio77/nix-colors/d1a0aeae920bb10814645ba0f8489f8c74756507";
   };
 
