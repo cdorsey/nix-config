@@ -1,10 +1,11 @@
 { lib, config, ... }:
+with lib;
 let cfg = config.userConfig.git;
 in {
   options.userConfig.git = {
-    enable = lib.mkEnableOption { };
-    userEmail = lib.mkOption { type = lib.types.str; };
-    userName = lib.mkOption { type = lib.types.str; };
+    enable = mkEnableOption { };
+    userEmail = mkOption { type = types.str; };
+    userName = mkOption { type = types.str; };
   };
 
   config.programs.git = {
