@@ -47,6 +47,7 @@ in {
       vim-surround
       vim-nix
       vim-airline
+      vim-airline-themes
       (vimThemeFromScheme { scheme = config.colorScheme; })
     ];
 
