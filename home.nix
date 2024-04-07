@@ -45,6 +45,7 @@ in {
     plugins = with pkgs.vimPlugins; [
       vim-surround
       vim-nix
+      vim-airline
       (vimThemeFromScheme { scheme = config.colorScheme; })
     ];
 
