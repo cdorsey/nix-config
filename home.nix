@@ -141,7 +141,8 @@ in {
   };
 
   home.sessionVariables = {
-    # EDITOR = "emacs";
+    ZELLIJ_AUTO_ATTACH = "true";
+    ZELLIJ_AUTO_EXIT = "true";
   };
 
   # Let Home Manager install and manage itself.
