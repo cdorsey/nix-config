@@ -13,7 +13,8 @@ in {
     poetry
   ];
 
-  colorScheme = nix-colors.colorSchemes.material-darker;
+  # colorScheme = nix-colors.colorSchemes.material-darker;
+  colorScheme = nix-colors.colorSchemes.primer-dark;
 
   programs.zsh = {
     enable = true;
