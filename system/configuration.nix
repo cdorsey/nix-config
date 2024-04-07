@@ -45,6 +45,7 @@
       jq
       yq
       sops
+      nixfmt
     ] ++ [
       (import ./scripts/nixos-switch.nix { inherit pkgs; })
     ];
