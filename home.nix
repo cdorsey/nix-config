@@ -33,7 +33,7 @@ in {
       https = "xh -s";
     };
 
-    initExtra = ''
+    initExtraFirst = ''
      . ${shellThemeFromScheme { scheme = config.colorScheme; }}
     '';
   };
