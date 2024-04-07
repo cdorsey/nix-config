@@ -1,6 +1,7 @@
 { config, pkgs, rootDir, nix-colors, ... }:
-
-{
+let
+  inherit (nix-colors.lib-contrib { inherit pkgs; }) vimThemeFromScheme;
+in {
   home.username = "nixos";
   home.homeDirectory = "/home/nixos";
 
@@ -10,7 +11,7 @@
     poetry
   ];
 
-  colorScheme = nix-colors.colorSchemes.tokyo-night-terminal-dark;
+  colorScheme = nix-colors.colorSchemes.onedark;
 
   programs.zsh = {
     enable = true;
@@ -43,7 +44,11 @@
     defaultEditor = true;
     plugins = with pkgs.vimPlugins; [
       vim-surround
+      vim-nix
+      (vimThemeFromScheme { scheme = config.colorScheme; })
     ];
+
+    extraConfig = "colorscheme nix-${config.colorScheme.slug}";
   };
 
   programs.git = {
@@ -77,19 +82,25 @@
           fg = "#${base06}";
           bg = "#${base00}";
           black = "#${base00}";
-          white = "#${base08}";
-          red = "#${base09}";
-          orange = "#${base0A}";
-          yellow = "#${base0B}";
-          green = "#${base0C}";
-          blue = "#${base0D}";
-          cyan = "#${base0E}";
-          magenta = "#${base0F}";
+          white = "#${base07}";
+          red = "#${base08}";
+          orange = "#${base09}";
+          yellow = "#${base0A}";
+          green = "#${base0B}";
+          blue = "#${base0C}";
+          cyan = "#${base0D}";
+          magenta = "#${base0E}";
         };
       };
 
       mouse_mode = true;
     };
+  };
+
+  programs.fzf = {
+    enable = true;
+
+    enableZshIntegration = true;
   };
 
   programs.zoxide = {
@@ -104,8 +115,10 @@
       [build]
       rustc-wrapper = "/run/current-system/sw/bin/sccache"
     '';
+  };
 
-    "${config.xdg.configHome}/pypoetry/config.toml".text = ''
+  xdg.configFile = {
+    "pypoetry/config.toml".text = ''
       [virtualenvs]
       in-project = true
     '';
