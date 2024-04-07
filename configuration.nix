@@ -10,7 +10,7 @@ let
   nixosSwitch = pkgs.writeScriptBin "nixos-switch" ''
     set -e
 
-    GIT=${pkgs.git}
+    GIT=${pkgs.git}/bin/git
 
     # I'm lazy, so if we're not in the right directory, just bail
     if [[ $PWD != ~/.dotfiles ]]; then
