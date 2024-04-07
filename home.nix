@@ -14,7 +14,8 @@ in {
   ];
 
   # colorScheme = nix-colors.colorSchemes.tokyo-night-terminal-dark;
-  colorScheme = nix-colors.colorSchemes.material-darker;
+  # colorScheme = nix-colors.colorSchemes.material-darker;
+  colorScheme = nix-colors.colorSchemes.darcula;
 
   programs.zsh = {
     enable = true;
