@@ -1,6 +1,8 @@
 { lib, config, pkgs, nix-colors, ... }:
 with lib;
-let cfg = config.userConfig.zellij;
+let
+  cfg = config.userConfig.zellij;
+  mkPlugin = name: { "${name}" = { path = name; }; };
 in {
   options.userConfig.zellij = {
     enable = mkEnableOption { };
@@ -24,12 +26,18 @@ in {
         pane_frames = false;
         mouse_mode = true;
 
-        plugins = {
-          tab-bar = { path = "tab-bar"; };
-          status-bar = { path = "status-bar"; };
-          strider = { path = "strider"; };
-          compact-bar = { path = "compact-bar"; };
-        };
+        # plugins = {
+        #   tab-bar = { path = "tab-bar"; };
+        #   status-bar = { path = "status-bar"; };
+        #   strider = { path = "strider"; };
+        #   compact-bar = { path = "compact-bar"; };
+        # };
+        plugins = mkMerge [
+          (mkPlugin "tab-bar")
+          (mkPlugin "status-bar")
+          (mkPlugin "strider")
+          (mkPlugin "compact-bar")
+        ];
 
         themes = with config.colorScheme.palette; {
           default = {
