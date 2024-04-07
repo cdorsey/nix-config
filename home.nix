@@ -1,6 +1,7 @@
 { config, pkgs, rootDir, nix-colors, ... }:
 let
   inherit (nix-colors.lib-contrib { inherit pkgs; }) vimThemeFromScheme;
+  inherit (nix-colors.lib-contrib { inherit pkgs; }) shellThemeFromScheme;
 in {
   home.username = "nixos";
   home.homeDirectory = "/home/nixos";
@@ -15,6 +16,7 @@ in {
 
   programs.zsh = {
     enable = true;
+    enableCompletion = true;
 
     oh-my-zsh = {
       enable = true;
@@ -29,13 +31,11 @@ in {
       ls = "exa";
       http = "xh";
       https = "xh -s";
-
-      # nixos-test = "sudo nixos-rebuild test --flake ~/.dotfiles";
-      # nixos-switch = "sudo nixos-rebuild switch --flake ~/.dotfiles";
-      # hm-switch = "home-manager switch --flake ~/.dotfiles";
-
-      #docker = "/run/current-system/sw/bin/docker";
     };
+
+    initExtra = ''
+      sh ${shellThemeFromScheme { scheme = config.colorScheme; }}
+    '';
   };
 
   programs.vim = {
