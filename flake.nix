@@ -14,15 +14,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    vscode-server.url = "github:nix-community/nixos-vscode-server";
+    vscode-server = {
+      url = "github:nix-community/nixos-vscode-server";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-colors.url = "github:misterio77/nix-colors";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, nix-colors, ... }@inputs:
   let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
@@ -42,8 +47,14 @@
 
     homeConfigurations.nixos = inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
-      extraSpecialArgs = { rootDir = ./.; };
-      modules = [ ./home.nix ];
+      extraSpecialArgs = {
+        inherit nix-colors;
+        rootDir = ./.;
+      };
+      modules = [
+        nix-colors.homeManagerModules.default
+        ./home.nix
+      ];
     };
   };
 }
