@@ -26,12 +26,6 @@ in {
         pane_frames = false;
         mouse_mode = true;
 
-        # plugins = {
-        #   tab-bar = { path = "tab-bar"; };
-        #   status-bar = { path = "status-bar"; };
-        #   strider = { path = "strider"; };
-        #   compact-bar = { path = "compact-bar"; };
-        # };
         plugins = mkMerge [
           (mkPlugin "tab-bar")
           (mkPlugin "status-bar")
