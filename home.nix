@@ -1,4 +1,4 @@
-{ config, pkgs, rootDir, ... }:
+{ config, pkgs, rootDir, nix-colors, ... }:
 
 {
   home.username = "nixos";
@@ -9,6 +9,8 @@
   home.packages = with pkgs; [
     poetry
   ];
+
+  colorScheme = nix-colors.colorSchemes.tokyo-night-terminal-dark;
 
   programs.zsh = {
     enable = true;
@@ -70,22 +72,22 @@
 
       pane_frames = false;
 
-      themes = {
-        tokyo-night = {
-          fg = [ 169 177 214 ];
-          bg = [ 26 27 38 ];
-          black = [ 56 62 90 ];
-          red = [ 249 51 87 ];
-          green = [ 158 206 106 ];
-          yellow = [ 224 175 104 ];
-          blue = [ 122 162 247 ];
-          magenta = [ 187 154 247 ];
-          cyan = [ 42 195 222 ];
-          white = [ 192 202 245 ];
-          orange = [ 255 158 100 ];
+      themes = with config.colorScheme.palette; {
+        default = {
+          fg = "#${base06}";
+          bg = "#${base00}";
+          black = "#${base00}";
+          white = "#${base08}";
+          red = "#${base09}";
+          orange = "#${base0A}";
+          yellow = "#${base0B}";
+          green = "#${base0C}";
+          blue = "#${base0D}";
+          cyan = "#${base0E}";
+          magenta = "#${base0F}";
         };
       };
-      theme = "tokyo-night";
+
       mouse_mode = true;
     };
   };
