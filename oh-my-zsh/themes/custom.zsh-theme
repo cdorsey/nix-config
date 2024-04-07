@@ -1,9 +1,8 @@
 context="$USER@$HOST"
 START="%{$fg_bold[blue]%}["
 END="%{$fg[blue]%}]%{$reset_color%}"
-TIMESTAMP="$START%{$fg[white]%}%*$END"
+TIMESTAMP="$START%{$reset_color%}%*$END"
 
-#PROMPT='%{$fg[cyan]%}%~%{$reset_color%} $(git_prompt_info)%{$fg_bold[blue]» %{$reset_color%}'
 PROMPT='%{$TIMESTAMP%} %{$START%}%{$fg[cyan]%}$context:%~$END $(git_prompt_info)
   %{$fg_bold[blue] » %{$reset_color%}'
 

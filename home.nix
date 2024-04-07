@@ -13,7 +13,6 @@ in {
     poetry
   ];
 
-  # colorScheme = nix-colors.colorSchemes.tokyo-night-terminal-dark;
   colorScheme = nix-colors.colorSchemes.material-darker;
 
   programs.zsh = {
