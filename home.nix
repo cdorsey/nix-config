@@ -34,7 +34,7 @@ in {
     };
 
     initExtra = ''
-      . ${shellThemeFromScheme { scheme = config.colorScheme; }}
+     . ${shellThemeFromScheme { scheme = config.colorScheme; }}
     '';
   };
 
