@@ -40,9 +40,9 @@
       modules = [
         inputs.vscode-server.nixosModules.default
         inputs.sops-nix.nixosModules.sops
-        ./wsl.nix
-        ./configuration.nix
-        ./hardware-configuration.nix
+        ./system/wsl.nix
+        ./system/configuration.nix
+        ./system/hardware-configuration.nix
       ];
     };
 
@@ -54,7 +54,7 @@
       };
       modules = [
         nix-colors.homeManagerModules.default
-        ./home.nix
+        ./user/home.nix
       ];
     };
   };
