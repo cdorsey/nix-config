@@ -1,7 +1,7 @@
 { pkgs, ... }:
 let
   git = "${pkgs.git}/bin/git";
-in pkgs.writeScriptBin "nixos-switch" ''
+in pkgs.writeShellScriptBin "nixos-switch" ''
   set -e
 
   # I'm lazy, so if we're not in the right directory, just bail
@@ -10,16 +10,16 @@ in pkgs.writeScriptBin "nixos-switch" ''
   fi
 
   # Update the user config if needed
-  if ! ${git} diff --quiet --ignore-all-space -- home.nix; then
+  if ! ${git} diff --quiet --ignore-all-space -- user/**/*.nix; then
     home-manager switch --flake .
-    ${git} add home.nix
+    ${git} add user/**/*.nix
     ${git} commit -m "$(home-manager generations | head -n1)"
   fi
 
   # Update the system config if needed
-  if ! ${git} diff --quiet --ignore-all-space -- *.nix; then
+  if ! ${git} diff --quiet --ignore-all-space -- system/**/*.nix; then
     sudo nixos-rebuild switch --flake .
-    ${git} add *.nix
+    ${git} add system/**/*.nix
     ${git} commit -m "$(nixos-rebuild list-generations 2>/dev/null | grep current)"
   fi
 
