@@ -14,7 +14,8 @@ in {
   ];
 
   # colorScheme = nix-colors.colorSchemes.material-darker;
-  colorScheme = nix-colors.colorSchemes.primer-dark;
+  # colorScheme = nix-colors.colorSchemes.primer-dark;
+  colorScheme = nix-colors.colorSchemes.chalk;
 
   programs.zsh = {
     enable = true;
