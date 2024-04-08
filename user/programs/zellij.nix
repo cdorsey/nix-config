@@ -28,7 +28,7 @@ in {
 
         plugins = mkMerge [
           (mkPlugin "tab-bar")
-          (mkPlugin "status-bar")
+          #(mkPlugin "status-bar")
           (mkPlugin "strider")
           (mkPlugin "compact-bar")
         ];
