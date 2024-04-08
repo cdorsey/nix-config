@@ -81,7 +81,7 @@ in {
                 tab_normal   "#[fg=#${base03}] {name} "
                 tab_active   "#[fg=#${base06},bold,italic] {name} "
 
-                command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
+                command_git_branch_command     "${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD"
                 command_git_branch_format      "#[fg=#${base0C}] {stdout} "
                 command_git_branch_interval    "10"
                 command_git_branch_rendermode  "static"
