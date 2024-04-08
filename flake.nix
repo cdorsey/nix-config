@@ -34,13 +34,16 @@
   outputs = { self, nixpkgs, nix-colors, ... }@inputs:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-      overlays = with inputs;
-        [
-          (final: prev: {
-            zjstatus = zjstatus.packages.${prev.system}.default;
-          })
-        ];
+      pkgs = import nixpkgs {
+        inherit system;
+
+        overlays = with inputs;
+          [
+            (final: prev: {
+              zjstatus = zjstatus.packages.${prev.system}.default;
+            })
+          ];
+      };
     in {
       nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
         inherit system;
