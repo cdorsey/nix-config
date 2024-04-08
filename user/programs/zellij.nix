@@ -75,8 +75,8 @@ in {
 
                 hide_frame_for_single_pane "true"
 
-                mode_normal  "#[bg=blue] {name} "
-                mode_tmux    "#[bg=green] {name} "
+                mode_normal  "#[bg=#${base0C},fg=#${base00}] {name} "
+                mode_tmux    "#[bg=#${base0B},fg=#${base00}] {name} "
 
                 tab_normal   "#[fg=#${base03}] {name} "
                 tab_active   "#[fg=#${base06},bold,italic] {name} "
