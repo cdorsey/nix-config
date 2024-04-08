@@ -78,7 +78,7 @@ in {
                 mode_normal  "#[bg=blue] "
                 mode_tmux    "#[bg=green] "
 
-                tab_normal   "#[fg=#${base04}] {name} "
+                tab_normal   "#[fg=#${base03}] {name} "
                 tab_active   "#[fg=#${base06},bold,italic] {name} "
 
                 command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
