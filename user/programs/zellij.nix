@@ -78,7 +78,7 @@ in {
                 mode_normal  "#[bg=blue] "
                 mode_tmux    "#[bg=green] "
 
-                tab_normal   "#[fg=#${base02}] {name} "
+                tab_normal   "#[fg=#${base04}] {name} "
                 tab_active   "#[fg=#${base06},bold,italic] {name} "
 
                 command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
@@ -86,7 +86,7 @@ in {
                 command_git_branch_interval    "10"
                 command_git_branch_rendermode  "static"
 
-                datetime        "#[fg=#${base02},bold] {format} "
+                datetime        "#[fg=#${base04},bold] {format} "
                 datetime_format "%A, %d %b %Y %H:%M"
                 datetime_timezone "US/Central"
               }
