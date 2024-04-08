@@ -61,7 +61,7 @@ in {
           layout {
             default_tab_template {
               children
-              pane size=1 borderless=true {
+              pane size=2 borderless=true {
                 plugin location="file://${pkgs.zjstatus}/bin/zjstatus.wasm" {
                 format_left   "{mode} #[fg=#${base0D},bold]{session}"
                 format_center "{tabs}"
