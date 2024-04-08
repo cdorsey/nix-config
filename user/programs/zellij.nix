@@ -75,14 +75,14 @@ in {
 
                 hide_frame_for_single_pane "true"
 
-                mode_normal  "#[bg=blue] "
-                mode_tmux    "#[bg=green] "
+                mode_normal  "#[bg=blue] {name} "
+                mode_tmux    "#[bg=green] {name} "
 
                 tab_normal   "#[fg=#${base03}] {name} "
                 tab_active   "#[fg=#${base06},bold,italic] {name} "
 
                 command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
-                command_git_branch_format      "#[fg=blue] {stdout} "
+                command_git_branch_format      "#[fg=#${base0C}] {stdout} "
                 command_git_branch_interval    "10"
                 command_git_branch_rendermode  "static"
 
