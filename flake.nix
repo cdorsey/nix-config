@@ -27,12 +27,20 @@
     # https://github.com/Misterio77/nix-colors/pull/53
     nix-colors.url =
       "github:misterio77/nix-colors/d1a0aeae920bb10814645ba0f8489f8c74756507";
+
+    zjstatus.url = "github:dj95/zjstatus";
   };
 
   outputs = { self, nixpkgs, nix-colors, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      overlays = with inputs;
+        [
+          (final: prev: {
+            zjstatus = zjstatus.packages.${prev.system}.default;
+          })
+        ];
     in {
       nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
         inherit system;
