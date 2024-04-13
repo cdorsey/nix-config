@@ -2,16 +2,18 @@
   description = "Nixos config flake";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-23.11";
+    nixpkgs-stable.url = "nixpkgs/nixos-23.11";
+
+    nixpkgs.url = "nixpkgs/nixos-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
     vscode-server = {
@@ -28,12 +30,16 @@
     nix-colors.url =
       "github:misterio77/nix-colors/d1a0aeae920bb10814645ba0f8489f8c74756507";
 
-    zjstatus.url = "github:dj95/zjstatus";
+    zjstatus = {
+      url = "github:dj95/zjstatus";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nix-colors, ... }@inputs:
+  outputs = { self, nixpkgs-stable, nixpkgs, nix-colors, ... }@inputs:
     let
       system = "x86_64-linux";
+      pkgs-stable = import nixpkgs-stable { inherit system; };
       pkgs = import nixpkgs {
         inherit system;
 
@@ -45,7 +51,7 @@
           ];
       };
     in {
-      nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.wsl = nixpkgs-stable.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
@@ -59,6 +65,7 @@
 
       homeConfigurations.nixos =
         inputs.home-manager.lib.homeManagerConfiguration {
+          inherit pkgs-stable;
           inherit pkgs;
           extraSpecialArgs = {
             inherit nix-colors;

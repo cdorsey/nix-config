@@ -18,9 +18,8 @@
 
   home.packages = with pkgs; [ poetry ];
 
-  # colorScheme = nix-colors.colorSchemes.material-darker;
-  # colorScheme = nix-colors.colorSchemes.primer-dark;
   colorScheme = nix-colors.colorSchemes.chalk;
+  #colorScheme = nix-colors.colorSchemes.cupcake;
 
   userConfig = {
     git = {

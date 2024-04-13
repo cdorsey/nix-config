@@ -30,9 +30,6 @@
       [
         wget
         vim-full
-        rustup
-        bun
-        python3
         xh
         bat
         eza
@@ -40,11 +37,12 @@
         fzf
         zoxide
         zellij
-        sccache
         jq
         yq
         sops
         nixfmt
+        jujutsu
+        nh
       ] ++ [ (import ./scripts/nixos-switch.nix { inherit pkgs; }) ];
   };
 

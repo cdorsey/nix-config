@@ -12,13 +12,6 @@ in pkgs.writeShellScriptBin "nixos-switch" ''
 
   ${nixfmt} $(${git} ls-files -m -x *.nix)
 
-  # Update the user config if needed
-  if ! ${git} diff --quiet --ignore-all-space -- user/**/*.nix; then
-    home-manager switch --flake .
-    ${git} add user/**/*.nix
-    ${git} commit -m "$(home-manager generations | head -n1)"
-  fi
-
   # Update the system config if needed
   if ! ${git} diff --quiet --ignore-all-space -- system/**/*.nix; then
     sudo nixos-rebuild switch --flake .
@@ -26,6 +19,12 @@ in pkgs.writeShellScriptBin "nixos-switch" ''
     ${git} commit -m "$(nixos-rebuild list-generations 2>/dev/null | grep current)"
   fi
 
+  # Update the user config if needed
+  if ! ${git} diff --quiet --ignore-all-space -- user/**/*.nix; then
+    home-manager switch --flake .
+    ${git} add user/**/*.nix
+    ${git} commit -m "$(home-manager generations | head -n1)"
+  fi
     # If there are remaining changed files, amend them to the last commit
   if ! ${git} diff --quiet --ignore-all-space; then
     ${git} commit --verbose --all --no-edit --amend

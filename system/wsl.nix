@@ -1,6 +1,6 @@
 # WSL configuration
 
-{ lib, inputs, pkgs, config, ... }:
+{ lib, inputs, pkgs-stable, pkgs, config, ... }:
 
 with lib; {
   imports = [ inputs.nixos-wsl.nixosModules.wsl ];
@@ -18,7 +18,7 @@ with lib; {
       interop.enabled = true;
     };
 
-    extraBin = with pkgs; [
+    extraBin = with pkgs-stable; [
       # Binaries for Docker Desktop wsl-distro-proxy
       { src = "${coreutils}/bin/mkdir"; }
       { src = "${coreutils}/bin/cat"; }
