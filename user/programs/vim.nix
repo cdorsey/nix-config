@@ -28,6 +28,7 @@ in {
     extraConfig = ''
       colorscheme nix-${config.colorScheme.slug}
 
+      set noshowmode
       let g:airline_theme='base16'
     '';
   };
