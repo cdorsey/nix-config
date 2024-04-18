@@ -7,10 +7,10 @@ in
 pkgs.writeShellScriptBin "nixos-switch" ''
   set -e
 
-  # I'm lazy, so if we're not in the right directory, just bail
-  if [[ $PWD != ~/.dotfiles ]]; then
-    exit 0
-  fi
+  SYSTEM_FILES=(flake.* system/**/*.nix)
+  USER_FILES=(user/**/*.nix)
+
+  pushd ~/.dotfiles
 
   ${nixfmt} $(${git} ls-files -m | grep '\.nix$')
 
@@ -27,8 +27,11 @@ pkgs.writeShellScriptBin "nixos-switch" ''
     ${git} add user/**/*.nix
     ${git} commit -m "$(home-manager generations | head -n1)"
   fi
-    # If there are remaining changed files, amend them to the last commit
+
+  # If there are remaining changed files, amend them to the last commit
   if ! ${git} diff --quiet --ignore-all-space; then
     ${git} commit --verbose --all --no-edit --amend
   fi
+
+  popd || true
 ''
