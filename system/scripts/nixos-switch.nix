@@ -17,7 +17,7 @@ pkgs.writeShellScriptBin "nixos-switch" ''
   # Update the system config if needed
   if ! ${git} diff --quiet --ignore-all-space -- flake.nix system/**/*.nix; then
     ${nh} os switch
-    ${git} add system/**/*.nix
+    ${git} add flake.* system/**/*.nix
     ${git} commit -m "$(nixos-rebuild list-generations 2>/dev/null | grep current)"
   fi
 
