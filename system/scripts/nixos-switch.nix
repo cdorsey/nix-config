@@ -10,7 +10,7 @@ pkgs.writeShellScriptBin "nixos-switch" ''
   SYSTEM_FILES=(flake.* system/**/*.nix)
   USER_FILES=(user/**/*.nix)
 
-  pushd ~/.dotfiles
+  pushd ~/.dotfiles > /dev/null
 
   ${nixfmt} $(${git} ls-files -m | grep '\.nix$')
 
@@ -33,5 +33,5 @@ pkgs.writeShellScriptBin "nixos-switch" ''
     ${git} commit --verbose --all --no-edit --amend
   fi
 
-  popd || true
+  popd > /dev/null || true
 ''
