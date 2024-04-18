@@ -1,9 +1,17 @@
-{ lib, config, pkgs, nix-colors, rootDir, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  nix-colors,
+  root-dir,
+  ...
+}:
 with lib;
 let
   inherit (nix-colors.lib-contrib { inherit pkgs; }) shellThemeFromScheme;
   cfg = config.userConfig.zsh;
-in {
+in
+{
   options.userConfig.zsh = {
     enable = mkEnableOption { };
     plugins = mkOption {
@@ -20,8 +28,12 @@ in {
       enable = cfg.enable;
 
       theme = "custom";
-      custom = "${rootDir}/oh-my-zsh";
-      plugins = [ "git" "node" "docker-compose" ] ++ cfg.plugins;
+      custom = "${root-dir}/oh-my-zsh";
+      plugins = [
+        "git"
+        "node"
+        "docker-compose"
+      ] ++ cfg.plugins;
     };
 
     shellAliases = {

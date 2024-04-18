@@ -1,4 +1,11 @@
-{ config, pkgs, rootDir, nix-colors, ... }: {
+{
+  config,
+  pkgs-unstable,
+  root-dir,
+  nix-colors,
+  ...
+}:
+{
   imports = [
     ./programs/bat.nix
     ./programs/cargo.nix
@@ -16,7 +23,7 @@
 
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
-  home.packages = with pkgs; [ poetry ];
+  home.packages = with pkgs-unstable; [ poetry ];
 
   colorScheme = nix-colors.colorSchemes.chalk;
   #colorScheme = nix-colors.colorSchemes.cupcake;

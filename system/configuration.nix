@@ -5,8 +5,18 @@
 # NixOS-WSL specific options are documented on the NixOS-WSL repository:
 # https://github.com/nix-community/NixOS-WSL
 
-{ config, lib, pkgs, ... }: {
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+{
+  config,
+  lib,
+  pkgs,
+  root-dir,
+  ...
+}:
+{
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   sops = {
     defaultSopsFile = ../secrets/secrets.yaml;
@@ -14,19 +24,33 @@
 
     age.keyFile = "/var/secrets/age/keys.txt";
 
-    secrets = { hello = { }; };
+    secrets = {
+      hello = { };
+    };
   };
 
   programs.nix-ld = {
     enable = true;
-    libraries = with pkgs;
-      [
+    libraries = with pkgs; [
 
-      ];
+    ];
   };
 
+  programs.zsh.enable = true;
+
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 4d --keep 3";
+
+    flake = "${config.users.users.nixos.home}/.dotfiles";
+  };
+
+  services.vscode-server.enable = true;
+
   environment = {
-    systemPackages = with pkgs;
+    systemPackages =
+      with pkgs;
       [
         wget
         vim-full
@@ -40,17 +64,15 @@
         jq
         yq
         sops
-        nixfmt
+        nixfmt-rfc-style
         jujutsu
-        nh
-      ] ++ [ (import ./scripts/nixos-switch.nix { inherit pkgs; }) ];
+      ]
+      ++ [ (import ./scripts/nixos-switch.nix { inherit pkgs; }) ];
   };
 
-  programs.zsh.enable = true;
-
-  services.vscode-server.enable = true;
-
-  users = { defaultUserShell = pkgs.zsh; };
+  users = {
+    defaultUserShell = pkgs.zsh;
+  };
 
   time.timeZone = "US/Central";
 
