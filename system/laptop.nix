@@ -83,6 +83,16 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # Configure fingerprint reader.
+  services.fprintd = {
+    enable = true;
+
+    tod = {
+      enable = true;
+      driver = pkgs.libfprint-2-tod1-goodix;
+    };
+  };
+
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
@@ -154,3 +164,4 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 }
+# ----

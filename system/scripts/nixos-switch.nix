@@ -5,10 +5,10 @@ let
   nh = "${pkgs.nh}/bin/nh";
 in
 pkgs.writeShellScriptBin "nixos-switch" ''
-  set -e
+  set -ex
 
-  SYSTEM_FILES=(flake.* system/**/*.nix)
-  USER_FILES=(user/**/*.nix)
+  SYSTEM_FILES=('flake.*' 'system/*.nix')
+  USER_FILES=('user/*.nix')
 
   pushd ~/.dotfiles > /dev/null
 
@@ -18,14 +18,14 @@ pkgs.writeShellScriptBin "nixos-switch" ''
   fi
 
   # Update the system config if needed
-  if ! ${git} diff --quiet --ignore-all-space -- flake.nix system/**/*.nix; then
+  if ! ${git} diff --quiet --ignore-all-space -- $SYSTEM_FILES; then
     ${nh} os switch
     ${git} add flake.* system/**/*.nix
     ${git} commit -m "$(nixos-rebuild list-generations 2>/dev/null | grep current)"
   fi
 
   # Update the user config if needed
-  if ! ${git} diff --quiet --ignore-all-space -- user/**/*.nix; then
+  if ! ${git} diff --quiet --ignore-all-space -- $USER_FILES; then
     ${nh} home switch
     ${git} add user/**/*.nix
     ${git} commit -m "$(home-manager generations | head -n1)"
@@ -38,3 +38,4 @@ pkgs.writeShellScriptBin "nixos-switch" ''
 
   popd > /dev/null || true
 ''
+# ----
