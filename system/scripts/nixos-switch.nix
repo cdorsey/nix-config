@@ -12,7 +12,10 @@ pkgs.writeShellScriptBin "nixos-switch" ''
 
   pushd ~/.dotfiles > /dev/null
 
-  ${nixfmt} $(${git} ls-files -m | grep '\.nix$')
+  MODIFIED_NIX=$(${git} ls-files -m | grep '\.nix$')
+  if [[ -n $MODIFIED_NIX ]]; then
+    ${nixfmt} $MODIFIED_NIX
+  fi
 
   # Update the system config if needed
   if ! ${git} diff --quiet --ignore-all-space -- flake.nix system/**/*.nix; then

@@ -68,6 +68,20 @@
         ];
       };
 
+      nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          inherit pkgs-stable;
+          inherit root-dir;
+        };
+        modules = [
+          inputs.sops-nix.nixosModules.sops
+          ./system/laptop.nix
+          ./system/hardware-configuration.laptop.nix
+        ];
+      };
+
       homeConfigurations.nixos = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs-stable;
         extraSpecialArgs = {
@@ -78,6 +92,19 @@
         modules = [
           nix-colors.homeManagerModules.default
           ./user/home.nix
+        ];
+      };
+
+      homeConfigurations."chase@laptop" = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgs-stable;
+        extraSpecialArgs = {
+          inherit nix-colors;
+          inherit root-dir;
+          pkgs-unstable = pkgs;
+        };
+        modules = [
+          nix-colors.homeManagerModules.default
+          ./user/home2.nix
         ];
       };
     };
