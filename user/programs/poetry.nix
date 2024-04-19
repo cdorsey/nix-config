@@ -1,8 +1,12 @@
 { lib, config, ... }:
 with lib;
-let cfg = config.userConfig.poetry;
-in {
-  options.userConfig.poetry = { enable = mkEnableOption { }; };
+let
+  cfg = config.userConfig.poetry;
+in
+{
+  options.userConfig.poetry = {
+    enable = mkEnableOption { };
+  };
 
   config.xdg.configFile = mkIf cfg.enable {
     "pypoetry/config.toml".text = ''

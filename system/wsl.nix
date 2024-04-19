@@ -1,8 +1,16 @@
 # WSL configuration
 
-{ lib, inputs, pkgs-stable, pkgs, config, ... }:
+{
+  lib,
+  inputs,
+  pkgs-stable,
+  pkgs,
+  config,
+  ...
+}:
 
-with lib; {
+with lib;
+{
   imports = [ inputs.nixos-wsl.nixosModules.wsl ];
 
   wsl = {
@@ -56,8 +64,7 @@ with lib; {
   systemd.services.systemd-resolved.enable = false;
   systemd.services.systemd-udevd.enable = false;
 
-  systemd.services.docker-desktop-proxy.script = lib.mkForce ''
-    ${config.wsl.wslConf.automount.root}/wsl/docker-desktop/docker-desktop-user-distro proxy --docker-desktop-root ${config.wsl.wslConf.automount.root}/wsl/docker-desktop "C:\Program Files\Docker\Docker\resources"'';
+  systemd.services.docker-desktop-proxy.script = lib.mkForce ''${config.wsl.wslConf.automount.root}/wsl/docker-desktop/docker-desktop-user-distro proxy --docker-desktop-root ${config.wsl.wslConf.automount.root}/wsl/docker-desktop "C:\Program Files\Docker\Docker\resources"'';
 
   # Don't allow emergency mode, because we don't have a console.
   systemd.enableEmergencyMode = false;
