@@ -5,10 +5,10 @@ let
   nh = "${pkgs.nh}/bin/nh";
 in
 pkgs.writeShellScriptBin "nixos-switch" ''
-  set -ex
+  set -e
 
-  SYSTEM_FILES=('flake.*' 'system/*.nix')
-  USER_FILES=('user/*.nix')
+  SYSTEM_FILES="flake.* system/*.nix"
+  USER_FILES="user/*.nix"
 
   pushd ~/.dotfiles > /dev/null
 
