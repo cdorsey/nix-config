@@ -7,8 +7,8 @@
     nixpkgs.url = "nixpkgs/nixos-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
-      inputs.nixpkgs.follows = "nixpkgs-stable";
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nixos-wsl = {
@@ -31,6 +31,11 @@
     nix-colors.url = "github:misterio77/nix-colors/d1a0aeae920bb10814645ba0f8489f8c74756507";
 
     zjstatus.url = "github:dj95/zjstatus";
+
+    nil = {
+      url = "github:oxalica/nil";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -48,7 +53,10 @@
       pkgs = import nixpkgs {
         inherit system;
 
-        overlays = with inputs; [ (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; }) ];
+        overlays = with inputs; [ 
+          (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; }) 
+          (final: prev: { nil = nil.packages.${prev.system}.default; })
+        ];
       };
     in
     {
@@ -84,6 +92,7 @@
 
       homeConfigurations.nixos = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs-stable;
+
         extraSpecialArgs = {
           inherit nix-colors;
           inherit root-dir;
@@ -96,11 +105,11 @@
       };
 
       homeConfigurations."chase@laptop" = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgs-stable;
+        inherit pkgs;
         extraSpecialArgs = {
           inherit nix-colors;
           inherit root-dir;
-          pkgs-unstable = pkgs;
+          inherit pkgs-stable;
         };
         modules = [
           nix-colors.homeManagerModules.default

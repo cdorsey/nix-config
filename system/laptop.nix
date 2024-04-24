@@ -2,15 +2,30 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   environment.systemPackages =
     with pkgs;
     [
+      gnome.gnome-tweaks
+      gnome-extension-manager
       wget
       git
       vim-full
+    ] ++ [ (import ./scripts/nixos-switch.nix { inherit pkgs; }) ];
+
+  users.users.chase = {
+    isNormalUser = true;
+    description = "Chase Dorsey";
+    shell = pkgs.zsh;
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
+    packages = with pkgs; [
+      firefox
+      vlc
       xh
       bat
       eza
@@ -23,22 +38,43 @@
       sops
       nixfmt-rfc-style
       jujutsu
-    ]
-    ++ [ (import ./scripts/nixos-switch.nix { inherit pkgs; }) ];
-
-  users.users.chase = {
-    isNormalUser = true;
-    description = "Chase Dorsey";
-    shell = pkgs.zsh;
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-    ];
-    packages = with pkgs; [
-      firefox
-      kitty
+      alacritty
+      _1password
+      _1password-gui
+      neovim
+      nil
+      signal-desktop
     ];
   };
+
+  sops.defaultSopsFile = ../secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+  sops.age.keyFile = "${config.users.users.chase.home}/.config/sops/age/keys.txt";
+
+  sops.secrets = {
+    smb = { };
+  };
+
+  fileSystems = let
+    host = "//192.168.1.9";
+    fsType = "cifs";
+    credentials = "/run/secrets/smb";
+    automount-opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+  in {
+    "/mnt/media" = {
+      inherit fsType;
+      device = "${host}/media";
+      options = ["${automount-opts},credentials=${credentials}"];
+    };
+
+    "/mnt/backup" = {
+      inherit fsType;
+      device = "${host}/backup";
+      options = ["${automount-opts},credentials=${credentials}"];
+    };
+  };
+
+    
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -66,6 +102,8 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
+
+  services.samba.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -126,6 +164,8 @@
 
   programs.zsh.enable = true;
 
+  programs.neovim.enable = true;
+
   programs.nh = {
     enable = true;
 
@@ -135,6 +175,11 @@
       enable = true;
       extraArgs = "--keep-since 4d --keep 3";
     };
+  };
+
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [];
   };
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -151,8 +196,8 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 9512 9510 ];
+  networking.firewall.allowedUDPPorts = [ 9512 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 

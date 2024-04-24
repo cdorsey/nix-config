@@ -1,7 +1,7 @@
 {
   lib,
   config,
-  pkgs-unstable,
+  pkgs,
   nix-colors,
   ...
 }:
@@ -70,9 +70,8 @@ in
     xdg.configFile."zellij/layouts/default.kdl".text = with config.colorScheme.palette; ''
         layout {
           default_tab_template {
-            children
             pane size=2 borderless=true {
-              plugin location="file://${pkgs-unstable.zjstatus}/bin/zjstatus.wasm" {
+              plugin location="file://${pkgs.zjstatus}/bin/zjstatus.wasm" {
               format_left   "{mode} #[fg=#${base0D},bold]{session}"
               format_center "{tabs}"
               format_right  "{command_git_branch} {datetime}"
@@ -81,7 +80,7 @@ in
               border_enabled  "true"
               border_char     "─"
               border_format   "#[fg=#${base01}]{char}"
-              border_position "top"
+              border_position "bottom"
 
               hide_frame_for_single_pane "true"
 
@@ -91,7 +90,7 @@ in
               tab_normal   "#[fg=#${base03}] {name} "
               tab_active   "#[fg=#${base06},bold,italic] {name} "
 
-              command_git_branch_command     "${pkgs-unstable.git}/bin/git rev-parse --abbrev-ref HEAD"
+              command_git_branch_command     "${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD"
               command_git_branch_format      "#[fg=#${base0C}] {stdout} "
               command_git_branch_interval    "10"
               command_git_branch_rendermode  "static"
@@ -101,6 +100,7 @@ in
               datetime_timezone "US/Central"
             }
           }
+          children
         }
       }
     '';
