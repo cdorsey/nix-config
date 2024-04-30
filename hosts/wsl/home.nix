@@ -7,15 +7,16 @@
 }:
 {
   imports = [
-    ./programs/bat.nix
-    ./programs/cargo.nix
-    ./programs/fzf.nix
-    ./programs/git.nix
-    ./programs/poetry.nix
-    ./programs/vim.nix
-    ./programs/zellij.nix
-    ./programs/zoxide.nix
-    ./programs/zsh.nix
+    nix-colors.homeManagerModules.default
+    ../../programs/bat.nix
+    ../../programs/cargo.nix
+    ../../programs/fzf.nix
+    ../../programs/git.nix
+    ../../programs/poetry.nix
+    ../../programs/vim.nix
+    ../../programs/zellij.nix
+    ../../programs/zoxide.nix
+    ../../programs/zsh.nix
   ];
 
   home.username = "nixos";

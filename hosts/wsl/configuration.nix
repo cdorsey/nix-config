@@ -7,19 +7,26 @@
 
 {
   config,
-  lib,
   pkgs,
   root-dir,
+  inputs,
   ...
 }:
 {
+  imports = [
+    inputs.vscode-server.nixosModules.default
+    inputs.sops-nix.nixosModules.sops
+    (root-dir + /nixosModules/wsl.nix)
+    ./hardware-configuration.nix
+  ];
+
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
 
   sops = {
-    defaultSopsFile = ../secrets/secrets.yaml;
+    defaultSopsFile = root-dir + /secrets/secrets.yaml;
     defaultSopsFormat = "yaml";
 
     age.keyFile = "/var/secrets/age/keys.txt";
@@ -38,13 +45,14 @@
 
   programs.zsh.enable = true;
 
-  programs.nh = {
-    enable = true;
-    clean.enable = true;
-    clean.extraArgs = "--keep-since 4d --keep 3";
-
-    flake = "${config.users.users.nixos.home}/.dotfiles";
-  };
+  # TODO This URI is broken
+  # programs.nh = {
+  #   enable = true;
+  #   clean.enable = true;
+  #   clean.extraArgs = "--keep-since 4d --keep 3";
+  #
+  #   flake = config.users.users.nixos.home + /.dotfiles;
+  # };
 
   services.vscode-server.enable = true;
 
@@ -67,7 +75,7 @@
         nixfmt-rfc-style
         jujutsu
       ]
-      ++ [ (import ./scripts/nixos-switch.nix { inherit pkgs; }) ];
+      ++ [ (import (root-dir + /scripts/nixos-switch.nix) { inherit pkgs; }) ];
   };
 
   users = {

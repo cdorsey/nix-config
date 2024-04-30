@@ -53,41 +53,32 @@
       pkgs = import nixpkgs {
         inherit system;
 
-        overlays = with inputs; [ 
-          (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; }) 
+        overlays = with inputs; [
+          (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; })
           (final: prev: { nil = nil.packages.${prev.system}.default; })
         ];
       };
     in
     {
       nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
+        inherit pkgs;
         inherit system;
         specialArgs = {
           inherit inputs;
           inherit pkgs-stable;
           inherit root-dir;
         };
-        modules = [
-          inputs.vscode-server.nixosModules.default
-          inputs.sops-nix.nixosModules.sops
-          ./system/wsl.nix
-          ./system/configuration.nix
-          ./system/hardware-configuration.nix
-        ];
+        modules = [ ./hosts/wsl/configuration.nix ];
       };
 
-      nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.hermes = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = {
           inherit inputs;
           inherit pkgs-stable;
           inherit root-dir;
         };
-        modules = [
-          inputs.sops-nix.nixosModules.sops
-          ./system/laptop.nix
-          ./system/hardware-configuration.laptop.nix
-        ];
+        modules = [ ./hosts/hermes/configuration.nix ];
       };
 
       homeConfigurations.nixos = inputs.home-manager.lib.homeManagerConfiguration {
@@ -98,23 +89,17 @@
           inherit root-dir;
           pkgs-unstable = pkgs;
         };
-        modules = [
-          nix-colors.homeManagerModules.default
-          ./user/home.nix
-        ];
+        modules = [ ./hosts/wsl/home.nix ];
       };
 
-      homeConfigurations."chase@laptop" = inputs.home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."chase@hermes" = inputs.home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         extraSpecialArgs = {
           inherit nix-colors;
           inherit root-dir;
           inherit pkgs-stable;
         };
-        modules = [
-          nix-colors.homeManagerModules.default
-          ./user/home2.nix
-        ];
+        modules = [ ./hosts/hermes/home.nix ];
       };
     };
 }

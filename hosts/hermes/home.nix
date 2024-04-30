@@ -1,22 +1,17 @@
-{
-  pkgs,
-  config,
-  root-dir,
-  nix-colors,
-  ...
-}:
+{ nix-colors, ... }:
 {
   imports = [
-    ./programs/bat.nix
-    ./programs/cargo.nix
-    ./programs/fzf.nix
-    ./programs/git.nix
-    ./programs/poetry.nix
-    ./programs/vim.nix
-    ./programs/nvim.nix
-    ./programs/zellij.nix
-    ./programs/zoxide.nix
-    ./programs/zsh.nix
+    nix-colors.homeManagerModules.default
+    ../../homeManagerModules/bat.nix
+    ../../homeManagerModules/cargo.nix
+    ../../homeManagerModules/fzf.nix
+    ../../homeManagerModules/git.nix
+    ../../homeManagerModules/poetry.nix
+    ../../homeManagerModules/vim.nix
+    ../../homeManagerModules/nvim.nix
+    ../../homeManagerModules/zellij.nix
+    ../../homeManagerModules/zoxide.nix
+    ../../homeManagerModules/zsh.nix
   ];
 
   home.username = "chase";
@@ -39,7 +34,7 @@
 
     fzf.enable = true;
 
-    poetry.enable = true;
+    #poetry.enable = true;
 
     #vim.enable = true;
 
@@ -48,6 +43,13 @@
     zoxide.enable = true;
 
     zsh.enable = true;
+  };
+
+  programs.direnv = {
+    enable = true;
+
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
   };
 
   programs.alacritty = {
@@ -64,8 +66,14 @@
       };
 
       window = {
-        padding = { x = 3; y = 3; };
-        dimensions = { columns = 100; lines = 25; };
+        padding = {
+          x = 3;
+          y = 3;
+        };
+        dimensions = {
+          columns = 100;
+          lines = 25;
+        };
         dynamic_padding = true;
         opacity = 0.9;
       };
@@ -75,4 +83,3 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }
-

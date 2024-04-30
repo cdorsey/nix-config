@@ -2,9 +2,20 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  root-dir,
+  inputs,
+  ...
+}:
 
 {
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+    ./hardware-configuration.nix
+  ];
+
   environment.systemPackages =
     with pkgs;
     [
@@ -12,8 +23,12 @@
       gnome-extension-manager
       wget
       git
-      vim-full
-    ] ++ [ (import ./scripts/nixos-switch.nix { inherit pkgs; }) ];
+      gcc
+      nodejs
+      fd
+      wl-clipboard
+    ]
+    ++ [ (import (root-dir + /scripts/nixos-switch.nix) { inherit pkgs; }) ];
 
   users.users.chase = {
     isNormalUser = true;
@@ -22,6 +37,7 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "docker"
     ];
     packages = with pkgs; [
       firefox
@@ -42,12 +58,11 @@
       _1password
       _1password-gui
       neovim
-      nil
       signal-desktop
     ];
   };
 
-  sops.defaultSopsFile = ../secrets/secrets.yaml;
+  sops.defaultSopsFile = root-dir + /secrets/secrets.yaml;
   sops.defaultSopsFormat = "yaml";
   sops.age.keyFile = "${config.users.users.chase.home}/.config/sops/age/keys.txt";
 
@@ -55,32 +70,32 @@
     smb = { };
   };
 
-  fileSystems = let
-    host = "//192.168.1.9";
-    fsType = "cifs";
-    credentials = "/run/secrets/smb";
-    automount-opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-  in {
-    "/mnt/media" = {
-      inherit fsType;
-      device = "${host}/media";
-      options = ["${automount-opts},credentials=${credentials}"];
-    };
+  fileSystems =
+    let
+      host = "//192.168.1.9";
+      fsType = "cifs";
+      credentials = "/run/secrets/smb";
+      automount-opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in
+    {
+      "/mnt/media" = {
+        inherit fsType;
+        device = "${host}/media";
+        options = [ "${automount-opts},credentials=${credentials}" ];
+      };
 
-    "/mnt/backup" = {
-      inherit fsType;
-      device = "${host}/backup";
-      options = ["${automount-opts},credentials=${credentials}"];
+      "/mnt/backup" = {
+        inherit fsType;
+        device = "${host}/backup";
+        options = [ "${automount-opts},credentials=${credentials}" ];
+      };
     };
-  };
-
-    
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "laptop"; # Define your hostname.
+  networking.hostName = "hermes"; # Define your hostname.
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -148,6 +163,8 @@
     #media-session.enable = true;
   };
 
+  virtualisation.docker.enable = true;
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -179,7 +196,7 @@
 
   programs.nix-ld = {
     enable = true;
-    libraries = with pkgs; [];
+    libraries = with pkgs; [ ];
   };
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -196,7 +213,11 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 9512 9510 ];
+  networking.firewall.allowedTCPPorts = [
+    # Unified Remote
+    9512
+    9510
+  ];
   networking.firewall.allowedUDPPorts = [ 9512 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
@@ -209,4 +230,3 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 }
-# ----
