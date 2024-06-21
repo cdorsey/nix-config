@@ -13,7 +13,9 @@
 {
   imports = [
     inputs.sops-nix.nixosModules.sops
+    inputs.nixos-hardware.nixosModules.framework-16-7040-amd
     ./hardware-configuration.nix
+    ../../nixosModules/wireguard.nix
   ];
 
   environment.systemPackages =
@@ -59,6 +61,8 @@
       _1password-gui
       neovim
       signal-desktop
+      syncthing
+      bazecor
     ];
   };
 
@@ -68,6 +72,8 @@
 
   sops.secrets = {
     smb = { };
+    "wg/hermes/private" = { };
+    "wg/hermes/public" = { };
   };
 
   fileSystems =
@@ -101,7 +107,7 @@
   networking.networkmanager.enable = true;
 
   # Set your time zone.
-  time.timeZone = "America/Chicago";
+  time.timeZone = "US/Eastern";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -136,15 +142,7 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Configure fingerprint reader.
-  services.fprintd = {
-    enable = true;
-
-    #tod = {
-    #  enable = true;
-    #  driver = pkgs.libfprint-2-tod1-goodix;
-    #};
-  };
+  services.fwupd.enable = true;
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -214,11 +212,19 @@
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
+    # Syncthing
+    22000
     # Unified Remote
     9512
     9510
   ];
-  networking.firewall.allowedUDPPorts = [ 9512 ];
+  networking.firewall.allowedUDPPorts = [
+    # Unified Remote
+    9512
+    # Syncthing
+    22000
+    21027
+  ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 

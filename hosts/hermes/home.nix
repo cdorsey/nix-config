@@ -1,7 +1,8 @@
-{ nix-colors, ... }:
+{ nix-colors, inputs, ... }:
 {
   imports = [
     nix-colors.homeManagerModules.default
+    inputs.nixvim.homeManagerModules.nixvim
     ../../homeManagerModules/bat.nix
     ../../homeManagerModules/cargo.nix
     ../../homeManagerModules/fzf.nix
@@ -12,6 +13,7 @@
     ../../homeManagerModules/zellij.nix
     ../../homeManagerModules/zoxide.nix
     ../../homeManagerModules/zsh.nix
+    ../../homeManagerModules/syncthing.nix
   ];
 
   home.username = "chase";
@@ -70,11 +72,15 @@
           x = 3;
           y = 3;
         };
-        dimensions = {
-          columns = 100;
-          lines = 25;
+        position = {
+          x = 900;
+          y = 350;
         };
-        dynamic_padding = true;
+        dimensions = {
+          lines = 40;
+          columns = 125;
+        };
+        # dynamic_padding = true;
         opacity = 0.9;
       };
     };

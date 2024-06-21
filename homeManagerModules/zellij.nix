@@ -2,7 +2,6 @@
   lib,
   config,
   pkgs,
-  nix-colors,
   ...
 }:
 with lib;
@@ -36,6 +35,8 @@ in
       settings = {
         pane_frames = false;
         mouse_mode = true;
+        copy_on_select = true;
+        copy_clipboard = "primary";
 
         plugins = mkMerge [
           (mkPlugin "tab-bar")
@@ -47,7 +48,7 @@ in
         themes = with config.colorScheme.palette; {
           default = {
             fg = "#${base06}";
-            bg = "#${base00}";
+            bg = "#${base0C}";
             black = "#${base00}";
             white = "#${base06}";
             red = "#${base08}";
