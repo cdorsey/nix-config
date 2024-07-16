@@ -41,6 +41,7 @@ in
       ls = "exa";
       http = "xh";
       https = "xh -s";
+      ssh = "TERM=xterm-256color ssh";
     };
 
     initExtraFirst = ''

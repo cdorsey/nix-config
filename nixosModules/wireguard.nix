@@ -16,7 +16,7 @@ in
         publicKey = "tZig7C6g9oeWb2N7xF+GH8XvKGedhxwvwyyHoTMaOi4=";
         allowedIPs = [ "0.0.0.0/0" ];
 
-        endpoint = "vpn.chase-dorsey.com:51820";
+        endpoint = "vpn.chase-dorsey.com:${toString listenPort}";
 
         persistentKeepalive = 25;
       }

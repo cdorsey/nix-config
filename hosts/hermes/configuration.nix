@@ -15,8 +15,15 @@
     inputs.sops-nix.nixosModules.sops
     inputs.nixos-hardware.nixosModules.framework-16-7040-amd
     ./hardware-configuration.nix
-    ../../nixosModules/wireguard.nix
+    #../../nixosModules/wireguard.nix
+    ../../nixosModules/1password.nix
+    ../../nixosModules/firefox.nix
+    ../../nixosModules/nh.nix
   ];
+
+  myNixOS = {
+    flakePath = "${config.users.users.chase.home}/.dotfiles";
+  };
 
   environment.systemPackages =
     with pkgs;
@@ -29,6 +36,7 @@
       nodejs
       fd
       wl-clipboard
+      vim
     ]
     ++ [ (import (root-dir + /scripts/nixos-switch.nix) { inherit pkgs; }) ];
 
@@ -42,7 +50,6 @@
       "docker"
     ];
     packages = with pkgs; [
-      firefox
       vlc
       xh
       bat
@@ -57,12 +64,8 @@
       nixfmt-rfc-style
       jujutsu
       alacritty
-      _1password
-      _1password-gui
       neovim
       signal-desktop
-      syncthing
-      bazecor
     ];
   };
 
@@ -72,7 +75,9 @@
 
   sops.secrets = {
     smb = { };
-    "wg/hermes/private" = { };
+    "wg/hermes/private" = {
+      mode = "0600";
+    };
     "wg/hermes/public" = { };
   };
 
@@ -131,8 +136,8 @@
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
-  #services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.desktopManager.cinnamon.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+  #services.xserver.desktopManager.cinnamon.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -181,17 +186,6 @@
   programs.zsh.enable = true;
 
   programs.neovim.enable = true;
-
-  programs.nh = {
-    enable = true;
-
-    flake = "${config.users.users.chase.home}/.dotfiles";
-
-    clean = {
-      enable = true;
-      extraArgs = "--keep-since 4d --keep 3";
-    };
-  };
 
   programs.nix-ld = {
     enable = true;
