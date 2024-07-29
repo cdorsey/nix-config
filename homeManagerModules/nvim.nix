@@ -47,6 +47,14 @@
       enable = true;
     };
 
+    plugins.luasnip = {
+      enable = true;
+
+      extraConfig = {
+        run = "make install_jsregexp";
+      };
+    };
+
     plugins.lsp = {
       enable = true;
       servers = {
@@ -136,6 +144,8 @@
       formattersByFt = {
         nix = [ "nixfmt" ];
         python = [ "ruff" ];
+        typescript = [ "prettier" ];
+        javascript = [ "prettier" ];
       };
 
       formatOnSave = { };
