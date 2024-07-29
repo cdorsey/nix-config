@@ -118,22 +118,24 @@
           { name = "buffer"; }
         ];
         mapping = {
-          "<CR>" = "cmp.mapping.confirm({ select = true })";
-          "<Tab>" = ''
-            function(fallback)
-              if cmp.visible() then
-                cmp.select_next_item()
-              --elseif luasnip.expandable() then
-              --  luasnip.expand()
-              --elseif luasnip.expand_or_jumpable() then
-              --  luasnip.expand_or_jump()
-              --elseif check_backspace() then
-              --  fallback()
-              else
-                fallback()
+          "<CR>" = # lua
+            "cmp.mapping.confirm({ select = true })";
+          "<Tab>" = # lua
+            ''
+              function(fallback)
+                if cmp.visible() then
+                  cmp.select_next_item()
+                elseif luasnip.expandable() then
+                  luasnip.expand()
+                elseif luasnip.expand_or_jumpable() then
+                   luasnip.expand_or_jump()
+                elseif check_backspace() then
+                   fallback()
+                else
+                   fallback()
+                end
               end
-            end
-          '';
+            '';
         };
       };
     };
@@ -157,7 +159,21 @@
       settings = {
         default_file_explorer = true;
         use_default_keymaps = true;
-        view_options.show_hidden = true;
+        view_options = {
+          is_hidden_file.__raw = # lua
+            ''
+              function(name, _)
+                for _, hidden in ipairs({'.git', '.jj'}) do
+                  if hidden == name then
+                    return true
+                  end
+                end
+
+                return false
+              end
+            '';
+
+        };
         keymaps = {
           "q" = "actions.close";
         };
