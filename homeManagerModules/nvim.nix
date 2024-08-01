@@ -114,28 +114,21 @@
       settings = {
         sources = [
           { name = "nvim_lsp"; }
+          { name = "luasnip"; }
           { name = "path"; }
           { name = "buffer"; }
         ];
+        snippet.expand = # lua
+          ''
+            function(args)
+              require('luascript').lsp_expand(args.body)
+            end
+          '';
         mapping = {
-          "<CR>" = # lua
-            "cmp.mapping.confirm({ select = true })";
-          "<Tab>" = # lua
-            ''
-              function(fallback)
-                if cmp.visible() then
-                  cmp.select_next_item()
-                elseif luasnip.expandable() then
-                  luasnip.expand()
-                elseif luasnip.expand_or_jumpable() then
-                   luasnip.expand_or_jump()
-                elseif check_backspace() then
-                   fallback()
-                else
-                   fallback()
-                end
-              end
-            '';
+          "<C-Space>" = ''cmp.mapping.complete()'';
+          "<CR>" = ''cmp.mapping.confirm({ select = true })'';
+          "<S-Tab>" = ''cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})'';
+          "<Tab>" = ''cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})'';
         };
       };
     };
