@@ -1,14 +1,17 @@
 { config, lib, ... }:
 {
-  programs.zsh.shellAliases = lib.mkIf config.programs.zsh.enable {
-    vim = "nvim";
-    vi = "nvim";
-  };
 
   programs.nixvim = {
     enable = true;
 
     defaultEditor = true;
+
+    viAlias = true;
+    vimAlias = true;
+
+    diagnostics = {
+      virtual_text = false;
+    };
 
     globals = {
       mapleader = " ";
@@ -29,6 +32,62 @@
         mode = "n";
         options.desc = "Open parent directory";
       }
+      {
+        action = "<CMD>Trouble diagnostics toggle filter.buf=0<CR>";
+        key = "<leader>xx";
+        mode = "n";
+        options.desc = "Diagnostics (Trouble)";
+      }
+      {
+        action = "<C-w>v<C-w>l";
+        key = "<leader>wn";
+        mode = "n";
+      }
+      {
+        action = "<C-w>c";
+        key = "<leader>wx";
+        mode = "n";
+      }
+      {
+        action = "<C-w>h";
+        key = "<leader>wh";
+        mode = "n";
+      }
+      {
+        action = "<C-w>j";
+        key = "<leader>wj";
+        mode = "n";
+      }
+      {
+        action = "<C-w>k";
+        key = "<leader>wk";
+        mode = "n";
+      }
+      {
+        action = "<C-w>l";
+        key = "<leader>wl";
+        mode = "n";
+      }
+      {
+        action = "<CMD>tabNext<CR>";
+        key = "<leader>tl";
+        mode = "n";
+      }
+      {
+        action = "<CMD>tabprevious<CR>";
+        key = "<leader>th";
+        mode = "n";
+      }
+      {
+        action = "<CMD>tabclose<CR>";
+        key = "<leader>tx";
+        mode = "n";
+      }
+      {
+        action = "<CMD>tabnew<CR>";
+        key = "<leader>tn";
+        mode = "n";
+      }
     ];
 
     colorschemes.tokyonight = {
@@ -37,6 +96,22 @@
       settings = {
         style = "night";
       };
+    };
+
+    plugins.trouble = {
+      enable = true;
+
+      settings = {
+        auto_close = true;
+      };
+    };
+
+    plugins.surround = {
+      enable = true;
+    };
+
+    plugins.indent-o-matic = {
+      enable = true;
     };
 
     plugins.lualine = {
@@ -49,10 +124,6 @@
 
     plugins.luasnip = {
       enable = true;
-
-      extraConfig = {
-        run = "make install_jsregexp";
-      };
     };
 
     plugins.lsp = {
@@ -114,26 +185,21 @@
       settings = {
         sources = [
           { name = "nvim_lsp"; }
+          { name = "luasnip"; }
           { name = "path"; }
           { name = "buffer"; }
         ];
-        mapping = {
-          "<CR>" = "cmp.mapping.confirm({ select = true })";
-          "<Tab>" = ''
-            function(fallback)
-              if cmp.visible() then
-                cmp.select_next_item()
-              --elseif luasnip.expandable() then
-              --  luasnip.expand()
-              --elseif luasnip.expand_or_jumpable() then
-              --  luasnip.expand_or_jump()
-              --elseif check_backspace() then
-              --  fallback()
-              else
-                fallback()
-              end
+        snippet.expand = # lua
+          ''
+            function(args)
+              require('luasnip').lsp_expand(args.body)
             end
           '';
+        mapping = {
+          "<C-Space>" = ''cmp.mapping.complete()'';
+          "<CR>" = ''cmp.mapping.confirm({ select = true })'';
+          "<S-Tab>" = ''cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})'';
+          "<Tab>" = ''cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})'';
         };
       };
     };
@@ -157,7 +223,20 @@
       settings = {
         default_file_explorer = true;
         use_default_keymaps = true;
-        view_options.show_hidden = true;
+        view_options = {
+          is_hidden_file.__raw = ''
+            function(name, _)
+              for _, hidden in ipairs({'.git', '.jj', 'node_modules', '.venv'}) do
+                if hidden == name then
+                  return true
+                end
+              end
+
+              return false
+            end
+          '';
+
+        };
         keymaps = {
           "q" = "actions.close";
         };
@@ -170,6 +249,10 @@
 
     plugins.nvim-autopairs = {
       enable = true;
+
+      settings = {
+        check_ts = true;
+      };
     };
 
     plugins.gitsigns = {
@@ -199,8 +282,12 @@
     plugins.treesitter = {
       enable = true;
 
-      indent = true;
-      nixvimInjections = true;
+      settings = {
+        indent.enable = true;
+        highlight.enable = true;
+        nixvimInjections = true;
+        auto_install = true;
+      };
     };
 
     plugins.treesitter-refactor = {
