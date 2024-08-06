@@ -7,12 +7,14 @@
   pkgs,
   root-dir,
   inputs,
+  system,
   ...
 }:
 
 {
   imports = [
     inputs.sops-nix.nixosModules.sops
+    inputs.agenix.nixosModules.default
     inputs.nixos-hardware.nixosModules.framework-16-7040-amd
     ./hardware-configuration.nix
     #../../nixosModules/wireguard.nix
@@ -37,6 +39,7 @@
       fd
       wl-clipboard
       vim
+      inputs.agenix.packages.${pkgs.system}.default
     ]
     ++ [ (import (root-dir + /scripts/nixos-switch.nix) { inherit pkgs; }) ];
 
