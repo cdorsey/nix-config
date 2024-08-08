@@ -7,13 +7,12 @@
   pkgs,
   root-dir,
   inputs,
-  system,
   ...
 }:
 
 {
   imports = [
-    inputs.sops-nix.nixosModules.sops
+    # inputs.sops-nix.nixosModules.sops
     inputs.agenix.nixosModules.default
     inputs.nixos-hardware.nixosModules.framework-16-7040-amd
     ./hardware-configuration.nix
@@ -21,6 +20,7 @@
     ../../nixosModules/1password.nix
     ../../nixosModules/firefox.nix
     ../../nixosModules/nh.nix
+    ../../nixosModules/ssh.nix
   ];
 
   myNixOS = {
@@ -40,6 +40,8 @@
       wl-clipboard
       vim
       inputs.agenix.packages.${pkgs.system}.default
+
+      cifs-utils
     ]
     ++ [ (import (root-dir + /scripts/nixos-switch.nix) { inherit pkgs; }) ];
 
@@ -72,36 +74,30 @@
     ];
   };
 
-  sops.defaultSopsFile = root-dir + /secrets/secrets.yaml;
-  sops.defaultSopsFormat = "yaml";
-  sops.age.keyFile = "${config.users.users.chase.home}/.config/sops/age/keys.txt";
-
-  sops.secrets = {
-    smb = { };
-    "wg/hermes/private" = {
-      mode = "0600";
-    };
-    "wg/hermes/public" = { };
+  age.secrets = {
+    smb.file = ../../secrets/smb.age;
   };
 
   fileSystems =
     let
       host = "//192.168.1.9";
       fsType = "cifs";
-      credentials = "/run/secrets/smb";
-      automount-opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      credentials = config.age.secrets.smb.path;
+      uid = toString config.users.users.chase.uid;
+      gid = toString config.users.groups.users.gid;
+      automount-opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,user,users";
     in
     {
       "/mnt/media" = {
         inherit fsType;
         device = "${host}/media";
-        options = [ "${automount-opts},credentials=${credentials}" ];
+        options = [ "${automount-opts},credentials=${credentials},rw,uid=1000,gid=${gid}" ];
       };
 
       "/mnt/backup" = {
         inherit fsType;
         device = "${host}/backup";
-        options = [ "${automount-opts},credentials=${credentials}" ];
+        options = [ "${automount-opts},credentials=${credentials},rw,uid=1000,gid=${gid}" ];
       };
     };
 
