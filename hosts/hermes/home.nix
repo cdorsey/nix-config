@@ -8,12 +8,12 @@
     ../../homeManagerModules/fzf.nix
     ../../homeManagerModules/git.nix
     ../../homeManagerModules/poetry.nix
-    ../../homeManagerModules/vim.nix
     ../../homeManagerModules/nvim.nix
     ../../homeManagerModules/zellij.nix
     ../../homeManagerModules/zoxide.nix
     ../../homeManagerModules/zsh.nix
     ../../homeManagerModules/syncthing.nix
+    ../../homeManagerModules/jj.nix
   ];
 
   home.username = "chase";
@@ -26,25 +26,23 @@
 
   userConfig = {
     git = {
-      enable = true;
-
       userName = "Chase Dorsey";
       userEmail = "git@chase-dorsey.com";
     };
 
-    cargo.enable = true;
+    # cargo.enable = true;
 
-    fzf.enable = true;
+    # fzf.enable = true;
 
     #poetry.enable = true;
 
     #vim.enable = true;
 
-    zellij.enable = true;
+    # zellij.enable = true;
 
-    zoxide.enable = true;
+    # zoxide.enable = true;
 
-    zsh.enable = true;
+    # zsh.enable = true;
   };
 
   programs.direnv = {

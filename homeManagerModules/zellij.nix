@@ -15,7 +15,6 @@ let
 in
 {
   options.userConfig.zellij = {
-    enable = mkEnableOption { };
     autoAttach = mkOption {
       type = types.bool;
       default = true;
@@ -28,9 +27,9 @@ in
 
   config = {
     programs.zellij = {
-      enable = cfg.enable;
+      enable = true;
 
-      enableZshIntegration = config.userConfig.zsh.enable;
+      enableZshIntegration = config.programs.zsh.enable;
 
       settings = {
         pane_frames = false;

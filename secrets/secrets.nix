@@ -7,4 +7,16 @@ in
     userPublicKey
     hermesPublicKey
   ];
+  "ssh-keys/hermes.age".publicKeys = [
+    userPublicKey
+    hermesPublicKey
+  ];
+  "ssh-keys/chase.age".publicKeys = [
+    userPublicKey
+    hermesPublicKey
+  ];
+  "ssh-keys/chase.legacy.age".publicKeys = [
+    userPublicKey
+    hermesPublicKey
+  ];
 }

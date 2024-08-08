@@ -1,22 +1,13 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
-}:
-with lib;
+{ config, pkgs, ... }:
 let
   cfg = config.userConfig.cargo;
 in
 {
-  options.userConfig.cargo = {
-    enable = mkEnableOption { };
-  };
+  options.userConfig.cargo = { };
 
-  config.home.file = mkIf cfg.enable {
-    ".cargo/config.toml".text = ''
+  config.home.file.".cargo/config.toml".text = # toml
+    ''
       [build]
       rustc-wrapper = "${pkgs.sccache}/bin/sccache"
     '';
-  };
 }

@@ -5,7 +5,6 @@ let
 in
 {
   options.userConfig.zoxide = {
-    enable = mkEnableOption { };
     useCd = mkOption {
       type = types.bool;
       default = true;
@@ -14,8 +13,8 @@ in
 
   config.programs.zoxide = mkMerge [
     ({
-      enable = cfg.enable;
-      enableZshIntegration = config.userConfig.zsh.enable;
+      enable = true;
+      enableZshIntegration = config.programs.zsh.enable;
     })
 
     (mkIf cfg.useCd {

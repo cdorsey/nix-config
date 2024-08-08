@@ -2,6 +2,7 @@
   lib,
   config,
   nix-colors,
+  pkgs,
   ...
 }:
 with lib;
@@ -10,12 +11,10 @@ let
   cfg = config.userConfig.bat;
 in
 {
-  options.userConfig.bat = {
-    enable = mkEnableOption { };
-  };
+  options.userConfig.bat = { };
 
   config.programs.bat = {
-    enable = cfg.enable;
+    enable = true;
 
     config.theme = "base16";
     themes.base16.src = textMateThemeFromScheme { scheme = config.colorScheme; };

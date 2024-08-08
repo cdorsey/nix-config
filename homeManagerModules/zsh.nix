@@ -13,7 +13,18 @@ let
 in
 {
   options.userConfig.zsh = {
-    enable = mkEnableOption { };
+    enableOMZ = mkOption {
+      type = types.bool;
+      default = true;
+    };
+    enableAutoSuggestion = mkOption {
+      type = types.bool;
+      default = true;
+    };
+    enableHighlight = mkOption {
+      type = types.bool;
+      default = true;
+    };
     plugins = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -21,11 +32,14 @@ in
   };
 
   config.programs.zsh = {
-    enable = cfg.enable;
+    enable = true;
     enableCompletion = true;
+    autosuggestion.enable = cfg.enableAutoSuggestion;
+
+    syntaxHighlighting.enable = cfg.enableHighlight;
 
     oh-my-zsh = {
-      enable = cfg.enable;
+      enable = cfg.enableOMZ;
 
       theme = "custom";
       custom = "${root-dir}/oh-my-zsh";
