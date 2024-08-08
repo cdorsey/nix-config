@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   programs._1password.enable = true;
   programs._1password-gui = {
@@ -12,5 +12,26 @@
       firefox
     '';
     mode = "0755";
+  };
+
+  systemd.user.services._1password = {
+    enable = true;
+    description = "1password";
+    environment = {
+      DISPLAY = ":0";
+    };
+
+    # wantedBy = [ "graphical-session.target" ];
+    wants = [ "gnome-session.target" ];
+    after = [ "gnome-session.target" ];
+    serviceConfig = {
+      Type = "exec";
+      ExecStart = "${config.programs._1password-gui.package}/bin/1password --silent";
+      StandardOutput = "journal";
+      StandardError = "journal";
+      Restart = "on-failure";
+      RestartSec = "10s";
+      OOMPolicy = "continue";
+    };
   };
 }
