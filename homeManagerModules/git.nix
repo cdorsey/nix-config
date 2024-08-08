@@ -5,13 +5,12 @@ let
 in
 {
   options.userConfig.git = {
-    enable = mkEnableOption { };
     userEmail = mkOption { type = types.str; };
     userName = mkOption { type = types.str; };
   };
 
   config.programs.git = {
-    enable = cfg.enable;
+    enable = true;
 
     userEmail = cfg.userEmail;
     userName = cfg.userName;

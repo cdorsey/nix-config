@@ -4,13 +4,11 @@ let
   cfg = config.userConfig.fzf;
 in
 {
-  options.userConfig.fzf = {
-    enable = mkEnableOption { };
-  };
+  options.userConfig.fzf = { };
 
   config.programs.fzf = {
-    enable = cfg.enable;
+    enable = true;
 
-    enableZshIntegration = config.userConfig.zsh.enable;
+    enableZshIntegration = config.programs.zsh.enable;
   };
 }

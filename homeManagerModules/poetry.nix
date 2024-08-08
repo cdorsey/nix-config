@@ -1,17 +1,13 @@
-{ lib, config, ... }:
-with lib;
+{ config, ... }:
 let
   cfg = config.userConfig.poetry;
 in
 {
-  options.userConfig.poetry = {
-    enable = mkEnableOption { };
-  };
+  options.userConfig.poetry = { };
 
-  config.xdg.configFile = mkIf cfg.enable {
-    "pypoetry/config.toml".text = ''
+  config.xdg.configFile."pypoetry/config.toml".text = # toml
+    ''
       [virtualenvs]
       in-project = true
     '';
-  };
 }

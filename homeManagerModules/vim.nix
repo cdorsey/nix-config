@@ -12,7 +12,6 @@ let
 in
 {
   options.userConfig.vim = {
-    enable = mkEnableOption { };
     plugins = mkOption {
       type = types.listOf types.package;
       default = [ ];
@@ -20,7 +19,7 @@ in
   };
 
   config.programs.vim = {
-    enable = cfg.enable;
+    enable = true;
 
     defaultEditor = true;
     plugins =
