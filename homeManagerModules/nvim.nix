@@ -17,7 +17,7 @@
       mapleader = " ";
     };
 
-    options = {
+    opts = {
       showmode = false;
       number = true;
       relativenumber = true;
@@ -136,7 +136,7 @@
       servers = {
         docker-compose-language-service.enable = true;
         dockerls.enable = true;
-        nil_ls = {
+        nil-ls = {
           enable = true;
           autostart = true;
         };
@@ -149,7 +149,11 @@
           };
         };
         ruff-lsp.enable = true;
-        rust-analyzer.enable = true;
+        rust-analyzer = {
+          enable = true;
+          installRustc = false;
+          installCargo = false;
+        };
         tailwindcss.enable = true;
         tsserver.enable = true;
         volar.enable = true;

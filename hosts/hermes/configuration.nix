@@ -16,6 +16,7 @@
     ../../nixosModules/firefox.nix
     ../../nixosModules/nh.nix
     ../../nixosModules/ssh.nix
+    ../../nixosModules/hyprland.nix
   ];
 
   myNixOS = {
@@ -25,8 +26,8 @@
   environment.systemPackages =
     with pkgs;
     [
-      gnome.gnome-tweaks
-      gnome-extension-manager
+      # gnome.gnome-tweaks
+      # gnome-extension-manager
       wget
       git
       gcc
@@ -37,6 +38,7 @@
       inputs.agenix.packages.${pkgs.system}.default
 
       cifs-utils
+      wofi
     ]
     ++ [ (import (root-dir + /scripts/nixos-switch.nix) { inherit pkgs; }) ];
 
@@ -125,8 +127,8 @@
 
   services.xserver.enable = true;
 
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  # services.xserver.displayManager.gdm.enable = true;
+  # services.xserver.desktopManager.gnome.enable = true;
 
   services.xserver = {
     layout = "us";
