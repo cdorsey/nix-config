@@ -20,9 +20,14 @@
     options = {
       showmode = false;
       number = true;
+      relativenumber = true;
       expandtab = true;
       shiftwidth = 4;
       cursorline = true;
+      termguicolors = true;
+      backspace = "indent,eol,start";
+      showmatch = true;
+      listchars = "tab:→ ,space:·,nbsp:␣,eol:¶";
     };
 
     keymaps = [
@@ -157,16 +162,11 @@
       autoEnableSources = true;
       cmdline = {
         "/" = {
-          mapping = {
-            __raw = # lua
-              "cmp.mapping.preset.cmdline()";
-          };
+          mapping.__raw = "cmp.mapping.preset.cmdline()";
           sources = [ { name = "buffer"; } ];
         };
         ":" = {
-          mapping = {
-            __raw = "cmp.mapping.preset.cmdline()";
-          };
+          mapping.__raw = "cmp.mapping.preset.cmdline()";
           sources = [
             { name = "path"; }
             {
@@ -274,16 +274,21 @@
     plugins.copilot-lua = {
       enable = true;
 
+      suggestion = {
+        autoTrigger = true;
+      };
+
       filetypes = {
         nix = false;
+        oil = false;
       };
+
     };
 
     plugins.treesitter = {
       enable = true;
 
       settings = {
-        indent.enable = true;
         highlight.enable = true;
         nixvimInjections = true;
         auto_install = true;
