@@ -34,11 +34,9 @@
       nodejs
       fd
       wl-clipboard
+      hyprshot
       vim
       inputs.agenix.packages.${pkgs.system}.default
-
-      cifs-utils
-      wofi
     ]
     ++ [ (import (root-dir + /scripts/nixos-switch.nix) { inherit pkgs; }) ];
 

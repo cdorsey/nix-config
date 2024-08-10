@@ -54,7 +54,7 @@ in
       (nmap "<leader>wl" "<C-w>l" { desc = "Move to window right"; })
       (nmap "<leader>w=" "<C-w>=" { desc = "Equally distribute windows"; })
       (nmap "<leader>tl" "<CMD>tabNext<CR>" { desc = "Switch to next tab"; })
-      (nmap "<leader>th" "<CMD>taprevious<CR>" { desc = "Move to previous tab"; })
+      (nmap "<leader>th" "<CMD>tabprevious<CR>" { desc = "Move to previous tab"; })
       (nmap "<leader>tx" "<CMD>tabclose<CR>" { desc = "Close current tab"; })
       (nmap "<leader>tn" "<CMD>tabnew<CR>" { desc = "Open a new tab"; })
     ];
@@ -64,6 +64,14 @@ in
 
       settings = {
         style = "night";
+      };
+    };
+
+    plugins.nvim-colorizer = {
+      enable = true;
+
+      userDefaultOptions = {
+        mode = "virtualtext";
       };
     };
 
@@ -213,7 +221,7 @@ in
         view_options = {
           is_hidden_file.__raw = ''
             function(name, _)
-            for _, hidden in ipairs({'.git', '.jj', 'node_modules', '.venv'}) do
+            for _, hidden in ipairs({'.git', '.jj', 'node_modules', '.venv', '.direnv'}) do
               if hidden == name then
                 return true
               end
@@ -296,9 +304,28 @@ in
         "<leader>ff" = "find_files";
         "<leader>fg" = "live_grep";
         "<leader>fb" = "buffers";
+        "<leader>fs" = "treesitter";
         "<leader>fh" = "help_tags";
         "<leader>fd" = "lsp_definitions";
         "<leader>fr" = "lsp_references";
+      };
+
+      settings = {
+        defaults = {
+          file_ignore_patterns = [
+            "^.git/"
+            "^.mypy_cache/"
+            "__pycache__/"
+            "^output/"
+            "^data/"
+            "^build/"
+            "^dist/"
+            "node_modules"
+            "%.ipynb"
+          ];
+
+          prompt_prefix = " ";
+        };
       };
     };
   };

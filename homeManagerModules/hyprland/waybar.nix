@@ -24,6 +24,7 @@
           "tray"
           # "custom/scratchpad-indicator"
           "pulseaudio"
+          "network"
           "custom/power"
         ];
 

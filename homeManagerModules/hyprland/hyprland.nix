@@ -6,19 +6,35 @@
 }:
 let
   mkSuperBinds = map (bind: "SUPER, ${bind}");
+  workspaceBinds = lib.lists.flatten (
+    map
+      (n: [
+        "SUPER, ${toString n}, workspace, ${toString n}"
+        "SUPER SHIFT, ${toString n}, movetoworkspace, ${toString n}"
+      ])
+      [
+        1
+        2
+        3
+        4
+        5
+        6
+        7
+        8
+        9
+        0
+      ]
+  );
   terminal = lib.getExe config.programs.alacritty.package;
   fileManager = lib.getExe pkgs.nautilus;
-  statusBar = lib.strings.concatStringsSep " " [
-    "${config.programs.gBar.package}/bin/gBar"
-    "bar"
-    "eDP-1"
-  ];
+  statusBar = lib.getExe config.programs.waybar.package;
   menu = lib.strings.concatStringsSep " " [
     (lib.getExe config.programs.rofi.package)
     "-show"
     "drun"
   ];
   browser = lib.getExe config.programs.firefox.package;
+  screenshot = lib.getExe pkgs.hyprshot;
 in
 {
   wayland.windowManager.hyprland = {
@@ -35,17 +51,23 @@ in
         "col.inactive_border" = "rgba(595959aa)";
       };
 
-      # exec-once = [ statusBar ];
-      exec-once = [ "${config.programs.gBar.package}/bin/gBar bar eDP-1" ];
+      exec-once = [ statusBar ];
 
-      bind = mkSuperBinds [
-        "Q, exec, ${terminal}"
-        "E, exec, ${fileManager}"
-        "SPACE, exec, ${menu}"
-        "B, exec, ${browser}"
-        "V, togglefloating,"
-        "X, killactive,"
-      ];
+      bind =
+        mkSuperBinds [
+          "GRAVE, exec, ${terminal}"
+          "E, exec, ${fileManager}"
+          "SPACE, exec, ${menu}"
+          "B, exec, ${browser}"
+          "V, togglefloating,"
+          "Q, killactive,"
+          "S, exec, hyprshot -m region"
+        ]
+        ++ workspaceBinds
+        ++ [
+          "SUPER SHIFT, S, exec, hyprshot -m window"
+          "SUPER ALT, S, exec, hyprshot -m output"
+        ];
 
       bindm = mkSuperBinds [
         "mouse:272, movewindow"
@@ -57,6 +79,17 @@ in
       input.touchpad = {
         natural_scroll = false;
       };
+
+      device = [
+        {
+          name = "corsair-corsair-dark-core-rgb-pro-gaming-mouse";
+          sensitivity = -0.8;
+        }
+        {
+          name = "corsair-corsair-virtuoso-xt-wireless-gaming-receiver";
+          sensitivity = -0.8;
+        }
+      ];
 
       decoration = {
         rounding = 10;
