@@ -1,6 +1,13 @@
 { config, lib, ... }:
+let
+  nmap = key: action: options: {
+    key = key;
+    action = action;
+    mode = "n";
+    options = options;
+  };
+in
 {
-
   programs.nixvim = {
     enable = true;
 
@@ -23,6 +30,9 @@
       relativenumber = true;
       expandtab = true;
       shiftwidth = 4;
+      tabstop = 4;
+      softtabstop = 4;
+      smarttab = true;
       cursorline = true;
       termguicolors = true;
       backspace = "indent,eol,start";
@@ -31,68 +41,22 @@
     };
 
     keymaps = [
-      {
-        action = "<CMD>Oil<CR>";
-        key = "-";
-        mode = "n";
-        options.desc = "Open parent directory";
-      }
-      {
-        action = "<CMD>Trouble diagnostics toggle filter.buf=0<CR>";
-        key = "<leader>xx";
-        mode = "n";
-        options.desc = "Diagnostics (Trouble)";
-      }
-      {
-        action = "<C-w>v<C-w>l";
-        key = "<leader>wn";
-        mode = "n";
-      }
-      {
-        action = "<C-w>c";
-        key = "<leader>wx";
-        mode = "n";
-      }
-      {
-        action = "<C-w>h";
-        key = "<leader>wh";
-        mode = "n";
-      }
-      {
-        action = "<C-w>j";
-        key = "<leader>wj";
-        mode = "n";
-      }
-      {
-        action = "<C-w>k";
-        key = "<leader>wk";
-        mode = "n";
-      }
-      {
-        action = "<C-w>l";
-        key = "<leader>wl";
-        mode = "n";
-      }
-      {
-        action = "<CMD>tabNext<CR>";
-        key = "<leader>tl";
-        mode = "n";
-      }
-      {
-        action = "<CMD>tabprevious<CR>";
-        key = "<leader>th";
-        mode = "n";
-      }
-      {
-        action = "<CMD>tabclose<CR>";
-        key = "<leader>tx";
-        mode = "n";
-      }
-      {
-        action = "<CMD>tabnew<CR>";
-        key = "<leader>tn";
-        mode = "n";
-      }
+      (nmap "-" "<CMD>Oil<CR>" { desc = "Open parent directory"; })
+      (nmap "<leader>xx" "<CMD>Trouble diagnostics toggle filter.buf=0<CR>" {
+        desc = "Open diagnostics (current buffer)";
+      })
+      (nmap "<leader>wn" "<C-w>v<C-w>l" { desc = "New window (vertical split)"; })
+      (nmap "<leader>wx" "<C-w>q" { desc = "Close focused window"; })
+      (nmap "<leader>wX" "<C-w>o" { desc = "Close other windows"; })
+      (nmap "<leader>wh" "<C-w>h" { desc = "Move to window left"; })
+      (nmap "<leader>wj" "<C-w>j" { desc = "Move to window down"; })
+      (nmap "<leader>wk" "<C-w>k" { desc = "Move to window up"; })
+      (nmap "<leader>wl" "<C-w>l" { desc = "Move to window right"; })
+      (nmap "<leader>w=" "<C-w>=" { desc = "Equally distribute windows"; })
+      (nmap "<leader>tl" "<CMD>tabNext<CR>" { desc = "Switch to next tab"; })
+      (nmap "<leader>th" "<CMD>taprevious<CR>" { desc = "Move to previous tab"; })
+      (nmap "<leader>tx" "<CMD>tabclose<CR>" { desc = "Close current tab"; })
+      (nmap "<leader>tn" "<CMD>tabnew<CR>" { desc = "Open a new tab"; })
     ];
 
     colorschemes.tokyonight = {
@@ -109,6 +73,17 @@
       settings = {
         auto_close = true;
       };
+    };
+
+    plugins.which-key = {
+      enable = true;
+      settings = {
+        preset = "helix";
+      };
+    };
+
+    plugins.friendly-snippets = {
+      enable = true;
     };
 
     plugins.surround = {
@@ -200,10 +175,10 @@
             end
           '';
         mapping = {
-          "<C-Space>" = ''cmp.mapping.complete()'';
-          "<CR>" = ''cmp.mapping.confirm({ select = true })'';
-          "<S-Tab>" = ''cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})'';
-          "<Tab>" = ''cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})'';
+          "<C-Space>" = "cmp.mapping.complete()";
+          "<CR>" = "cmp.mapping.confirm({ select = true })";
+          "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
+          "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
         };
       };
     };
@@ -230,13 +205,13 @@
         view_options = {
           is_hidden_file.__raw = ''
             function(name, _)
-              for _, hidden in ipairs({'.git', '.jj', 'node_modules', '.venv'}) do
-                if hidden == name then
-                  return true
-                end
+            for _, hidden in ipairs({'.git', '.jj', 'node_modules', '.venv'}) do
+              if hidden == name then
+                return true
               end
+            end
 
-              return false
+            return false
             end
           '';
 
@@ -294,6 +269,7 @@
 
       settings = {
         highlight.enable = true;
+        indent.enable = true;
         nixvimInjections = true;
         auto_install = true;
       };
@@ -316,10 +292,6 @@
         "<leader>fd" = "lsp_definitions";
         "<leader>fr" = "lsp_references";
       };
-    };
-
-    plugins.none-ls = {
-      enable = true;
     };
   };
 }
