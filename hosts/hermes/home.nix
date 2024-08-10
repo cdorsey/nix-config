@@ -3,6 +3,7 @@
   imports = [
     nix-colors.homeManagerModules.default
     inputs.nixvim.homeManagerModules.nixvim
+    inputs.hyprland.homeManagerModules.default
     ../../homeManagerModules/bat.nix
     ../../homeManagerModules/cargo.nix
     ../../homeManagerModules/fzf.nix
@@ -14,6 +15,7 @@
     ../../homeManagerModules/zsh.nix
     ../../homeManagerModules/syncthing.nix
     ../../homeManagerModules/jj.nix
+    ../../homeManagerModules/hyprland
   ];
 
   home.username = "chase";
@@ -22,27 +24,12 @@
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
   colorScheme = nix-colors.colorSchemes.chalk;
-  #colorScheme = nix-colors.colorSchemes.cupcake;
 
   userConfig = {
     git = {
       userName = "Chase Dorsey";
       userEmail = "git@chase-dorsey.com";
     };
-
-    # cargo.enable = true;
-
-    # fzf.enable = true;
-
-    #poetry.enable = true;
-
-    #vim.enable = true;
-
-    # zellij.enable = true;
-
-    # zoxide.enable = true;
-
-    # zsh.enable = true;
   };
 
   programs.direnv = {

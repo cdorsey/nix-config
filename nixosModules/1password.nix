@@ -21,9 +21,8 @@
       DISPLAY = ":0";
     };
 
-    # wantedBy = [ "graphical-session.target" ];
-    wants = [ "gnome-session.target" ];
-    after = [ "gnome-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
     serviceConfig = {
       Type = "exec";
       ExecStart = "${config.programs._1password-gui.package}/bin/1password --silent";
