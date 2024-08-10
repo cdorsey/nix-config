@@ -8,6 +8,7 @@ let
   mkSuperBinds = map (bind: "SUPER, ${bind}");
   terminal = lib.getExe config.programs.alacritty.package;
   fileManager = lib.getExe pkgs.nautilus;
+  statusBar = lib.getExe config.programs.waybar.package;
   menu = lib.strings.concatStringsSep " " [
     (lib.getExe config.programs.rofi.package)
     "-show"
@@ -29,11 +30,14 @@ in
         "col.inactive_border" = "rgba(595959aa)";
       };
 
+      exec-once = [ statusBar ];
+
       bind = mkSuperBinds [
         "Q, exec, ${terminal}"
         "E, exec, ${fileManager}"
         "SPACE, exec, ${menu}"
         "V, togglefloating,"
+        "X, killactive,"
       ];
 
       bindm = mkSuperBinds [
