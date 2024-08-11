@@ -131,8 +131,10 @@
   # services.xserver.desktopManager.gnome.enable = true;
 
   services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
   };
 
   services.printing.enable = true;

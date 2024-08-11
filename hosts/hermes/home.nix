@@ -1,4 +1,9 @@
-{ nix-colors, inputs, ... }:
+{
+  nix-colors,
+  inputs,
+  colorScheme,
+  ...
+}:
 {
   imports = [
     nix-colors.homeManagerModules.default
@@ -16,6 +21,7 @@
     ../../homeManagerModules/syncthing.nix
     ../../homeManagerModules/jj.nix
     ../../homeManagerModules/hyprland
+    ../../homeManagerModules/wezterm.nix
   ];
 
   home.username = "chase";
@@ -23,7 +29,7 @@
 
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
-  colorScheme = nix-colors.colorSchemes.chalk;
+  colorScheme = colorScheme;
 
   userConfig = {
     git = {

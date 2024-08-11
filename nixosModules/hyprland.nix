@@ -8,7 +8,7 @@
 
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  services.xserver.displayManager.sddm = {
+  services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
   };

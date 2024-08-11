@@ -26,22 +26,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
-    };
-
     # https://github.com/Misterio77/nix-colors/pull/53
     nix-colors.url = "github:misterio77/nix-colors/d1a0aeae920bb10814645ba0f8489f8c74756507";
 
     zjstatus = {
       url = "github:dj95/zjstatus";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nil = {
-      url = "github:oxalica/nil";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -76,6 +65,7 @@
     work-values = {
       url = "git+ssh://git@gitlab.com/cdorseyQ2/nix-values.git";
     };
+    gBar.url = "github:scorpion-26/gBar";
   };
 
   outputs =
@@ -90,10 +80,11 @@
     let
       system = "x86_64-linux";
       root-dir = ./.;
+      colorScheme = nix-colors.colorSchemes."material-darker";
       overlays = with inputs; [
         rust-overlay.overlays.default
-        (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; })
-        (final: prev: { nil = nil.packages.${prev.system}.default; })
+        (final: prev: { zjstatus = zjstatus.packages.${final.system}.default; })
+        # (final: prev: { nil = nil.packages.${prev.system}.default; })
       ];
       pkgs-stable = import nixpkgs-stable { inherit system; };
       pkgs = import nixpkgs {
@@ -128,6 +119,8 @@
       };
 
       darwinConfigurations."JNLQ1FQ95N-MBP" = nix-darwin.lib.darwinSystem {
+        darwinPackages = darwinPackages;
+
         pkgs = darwinPackages;
         system = "aarch64-darwin";
         specialArgs = {
@@ -170,6 +163,7 @@
           inherit nix-colors;
           inherit root-dir;
           inherit pkgs-stable;
+          inherit colorScheme;
         };
         modules = [ ./hosts/hermes/home.nix ];
       };

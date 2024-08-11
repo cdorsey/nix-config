@@ -8,12 +8,17 @@ let
   mkSuperBinds = map (bind: "SUPER, ${bind}");
   terminal = lib.getExe config.programs.alacritty.package;
   fileManager = lib.getExe pkgs.nautilus;
-  statusBar = lib.getExe config.programs.waybar.package;
+  statusBar = lib.strings.concatStringsSep " " [
+    "${config.programs.gBar.package}/bin/gBar"
+    "bar"
+    "eDP-1"
+  ];
   menu = lib.strings.concatStringsSep " " [
     (lib.getExe config.programs.rofi.package)
     "-show"
     "drun"
   ];
+  browser = lib.getExe config.programs.firefox.package;
 in
 {
   wayland.windowManager.hyprland = {
@@ -30,12 +35,14 @@ in
         "col.inactive_border" = "rgba(595959aa)";
       };
 
-      exec-once = [ statusBar ];
+      # exec-once = [ statusBar ];
+      exec-once = [ "${config.programs.gBar.package}/bin/gBar bar eDP-1" ];
 
       bind = mkSuperBinds [
         "Q, exec, ${terminal}"
         "E, exec, ${fileManager}"
         "SPACE, exec, ${menu}"
+        "B, exec, ${browser}"
         "V, togglefloating,"
         "X, killactive,"
       ];
@@ -81,6 +88,11 @@ in
       };
 
       windowrulev2 = [ "suppressevent maximize, class:.*" ];
+
+      monitor = [
+        "eDP-1, preferred, auto, 1.6, vrr, 1"
+        ", preferred, auto, 1"
+      ];
     };
   };
 }

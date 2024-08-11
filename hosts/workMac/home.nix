@@ -1,7 +1,7 @@
-{ nix-colors, inputs, ... }:
+{ colorScheme, inputs, ... }:
 {
   imports = [
-    nix-colors.homeManagerModules.default
+    inputs.nix-colors.homeManagerModules.default
     ../../homeManagerModules/bat.nix
     ../../homeManagerModules/zsh.nix
     ../../homeManagerModules/git.nix
@@ -12,7 +12,7 @@
     ../../homeManagerModules/vim.nix
   ];
 
-  colorScheme = nix-colors.colorSchemes.material-darker;
+  colorScheme = colorScheme;
 
   userConfig = {
     git = {
