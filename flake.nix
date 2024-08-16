@@ -16,6 +16,11 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -67,6 +72,10 @@
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    work-values = {
+      url = "git+ssh://git@gitlab.com/cdorseyQ2/nix-values.git";
+    };
   };
 
   outputs =
@@ -75,6 +84,7 @@
       nixpkgs-stable,
       nixpkgs,
       nix-colors,
+      nix-darwin,
       ...
     }@inputs:
     let
@@ -88,11 +98,11 @@
       pkgs-stable = import nixpkgs-stable { inherit system; };
       pkgs = import nixpkgs {
         inherit system;
-
-        overlays = with inputs; [
-          (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; })
-          (final: prev: { nil = nil.packages.${prev.system}.default; })
-        ];
+        inherit overlays;
+      };
+      darwinPackages = import nixpkgs {
+        system = "aarch64-darwin";
+        inherit overlays;
       };
     in
     {
@@ -115,6 +125,31 @@
           inherit root-dir;
         };
         modules = [ ./hosts/hermes/configuration.nix ];
+      };
+
+      darwinConfigurations."JNLQ1FQ95N-MBP" = nix-darwin.lib.darwinSystem {
+        pkgs = darwinPackages;
+        system = "aarch64-darwin";
+        specialArgs = {
+          inherit inputs;
+          test = inputs.work-values.hello;
+        };
+        modules = [
+          ./hosts/workMac/configuration.nix
+          inputs.home-manager.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.cdorsey = import ./hosts/workMac/home.nix;
+
+            home-manager.extraSpecialArgs = {
+              inherit inputs;
+              inherit nix-colors;
+              inherit root-dir;
+            };
+          }
+        ];
       };
 
       homeConfigurations.nixos = inputs.home-manager.lib.homeManagerConfiguration {

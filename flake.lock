@@ -740,7 +740,7 @@
         "flake-parts": "flake-parts",
         "git-hooks": "git-hooks",
         "home-manager": "home-manager_2",
-        "nix-darwin": "nix-darwin",
+        "nix-darwin": "nix-darwin_2",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -791,6 +791,7 @@
         "hyprland-plugins": "hyprland-plugins",
         "nil": "nil",
         "nix-colors": "nix-colors",
+        "nix-darwin": "nix-darwin",
         "nixos-hardware": "nixos-hardware",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
@@ -799,6 +800,7 @@
         "rust-overlay": "rust-overlay_2",
         "sops-nix": "sops-nix",
         "vscode-server": "vscode-server",
+        "work-values": "work-values",
         "zjstatus": "zjstatus"
       }
     },
@@ -1032,6 +1034,21 @@
         "owner": "nix-community",
         "repo": "nixos-vscode-server",
         "type": "github"
+      }
+    },
+    "work-values": {
+      "locked": {
+        "lastModified": 1724447126,
+        "narHash": "sha256-cTpcBbLy1J3VNNR2IRtQ+lHKG56Oq1V0fqlbdX1KWNE=",
+        "ref": "refs/heads/main",
+        "rev": "4bfb94422adb11056f64c10a90f5d49f7f1ad73a",
+        "revCount": 7,
+        "type": "git",
+        "url": "ssh://git@gitlab.com/cdorseyQ2/nix-values.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@gitlab.com/cdorseyQ2/nix-values.git"
       }
     },
     "xdph": {
