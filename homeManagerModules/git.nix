@@ -17,6 +17,8 @@ in
 
     extraConfig = {
       init.defaultBranch = "main";
+      blame.ignoreRevsFile = ".git-blame-ignore-revs";
+      rebase.autosquash = true;
     };
   };
 }
