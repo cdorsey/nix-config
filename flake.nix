@@ -16,6 +16,11 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -70,19 +75,24 @@
       nixpkgs-stable,
       nixpkgs,
       nix-colors,
+      nix-darwin,
       ...
     }@inputs:
     let
       system = "x86_64-linux";
       root-dir = ./.;
+      overlays = with inputs; [
+        (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; })
+        (final: prev: { nil = nil.packages.${prev.system}.default; })
+      ];
       pkgs-stable = import nixpkgs-stable { inherit system; };
       pkgs = import nixpkgs {
         inherit system;
-
-        overlays = with inputs; [
-          (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; })
-          (final: prev: { nil = nil.packages.${prev.system}.default; })
-        ];
+        inherit overlays;
+      };
+      darwinPackages = import nixpkgs {
+        system = "aarch64-darwin";
+        inherit overlays;
       };
     in
     {
@@ -106,6 +116,31 @@
         };
         modules = [ ./hosts/hermes/configuration.nix ];
       };
+
+      darwinConfigurations."JNLQ1FQ95N-MBP" = nix-darwin.lib.darwinSystem {
+        pkgs = darwinPackages;
+        system = "aarch64-darwin";
+        specialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          ./hosts/workMac/configuration.nix
+          inputs.home-manager.darwinModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.cdorsey = import ./hosts/workMac/home.nix;
+
+            home-manager.extraSpecialArgs = {
+              inherit inputs;
+              inherit nix-colors;
+              inherit root-dir;
+            };
+          }
+        ];
+      };
+
+      darwinPackages = darwinPackages;
 
       homeConfigurations.nixos = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs-stable;
