@@ -10,7 +10,7 @@
     ../../homeManagerModules/zoxide.nix
   ];
 
-  colorScheme = nix-colors.colorSchemes.chalk;
+  colorScheme = nix-colors.colorSchemes.material-darker;
 
   userConfig = {
     git = {

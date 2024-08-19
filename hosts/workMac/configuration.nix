@@ -2,7 +2,13 @@
   pkgs,
   ...
 }: {
-  environment.systemPackages = with pkgs; [ vim bat ];
+  environment.systemPackages = with pkgs; [
+    vim
+    eza
+    ripgrep
+    yq
+    jq
+  ];
 
   users.users.cdorsey = {
     shell = pkgs.zsh;
