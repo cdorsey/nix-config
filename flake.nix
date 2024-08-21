@@ -62,6 +62,11 @@
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
     };
+
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -75,6 +80,11 @@
     let
       system = "x86_64-linux";
       root-dir = ./.;
+      overlays = with inputs; [
+        rust-overlay.overlays.default
+        (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; })
+        (final: prev: { nil = nil.packages.${prev.system}.default; })
+      ];
       pkgs-stable = import nixpkgs-stable { inherit system; };
       pkgs = import nixpkgs {
         inherit system;
