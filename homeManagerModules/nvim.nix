@@ -67,6 +67,14 @@ in
       };
     };
 
+    plugins.lazygit = {
+      enable = true;
+
+      settings = {
+        floating_window_use_plenary = true;
+      };
+    };
+
     plugins.trouble = {
       enable = true;
 

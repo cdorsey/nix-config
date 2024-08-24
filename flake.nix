@@ -32,6 +32,7 @@
     zjstatus = {
       url = "github:dj95/zjstatus";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -65,7 +66,10 @@
     work-values = {
       url = "git+ssh://git@gitlab.com/cdorseyQ2/nix-values.git";
     };
+
     gBar.url = "github:scorpion-26/gBar";
+
+    nil.url = "github:oxalica/nil";
   };
 
   outputs =
@@ -83,8 +87,8 @@
       colorScheme = nix-colors.colorSchemes."material-darker";
       overlays = with inputs; [
         rust-overlay.overlays.default
-        (final: prev: { zjstatus = zjstatus.packages.${final.system}.default; })
-        # (final: prev: { nil = nil.packages.${prev.system}.default; })
+        # (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; })
+        (final: prev: { nil = inputs.nil.packages.${prev.system}.default; })
       ];
       pkgs-stable = import nixpkgs-stable { inherit system; };
       pkgs = import nixpkgs {
