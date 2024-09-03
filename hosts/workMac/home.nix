@@ -9,6 +9,7 @@
     ../../homeManagerModules/fzf.nix
     ../../homeManagerModules/zellij.nix
     ../../homeManagerModules/zoxide.nix
+    ../../homeManagerModules/vim.nix
   ];
 
   colorScheme = nix-colors.colorSchemes.material-darker;
