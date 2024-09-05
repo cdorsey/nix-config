@@ -14,7 +14,7 @@
     ../../homeManagerModules/fzf.nix
     ../../homeManagerModules/git.nix
     ../../homeManagerModules/poetry.nix
-    ../../homeManagerModules/nvim.nix
+    ../../homeManagerModules/nvim
     ../../homeManagerModules/zellij.nix
     ../../homeManagerModules/zoxide.nix
     ../../homeManagerModules/zsh.nix

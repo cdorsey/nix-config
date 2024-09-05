@@ -9,24 +9,50 @@
       mainBar = {
         layer = "top";
         position = "top";
-        height = 31;
+        height = 38;
 
         modules-left = [
           "hyprland/workspaces"
           "hyprland/submap"
           "hyprland/window"
         ];
-        modules-center = [
-          "clock"
-          # "idle_inhibitor"
-        ];
+        modules-center = [ "clock" ];
         modules-right = [
           "tray"
-          # "custom/scratchpad-indicator"
+          "pulseaudio/slider"
           "pulseaudio"
           "network"
+          "network#speed"
+          "battery"
           "custom/power"
         ];
+
+        battery = {
+          format = "{icon}";
+          interval = 10;
+
+          states = {
+            critical = 15;
+            low = 30;
+            medium = 60;
+            high = 90;
+          };
+          format-icons = {
+            default = [
+              "󰂃"
+              "󱊡"
+              "󱊢"
+              "󱊣"
+            ];
+            charging = [
+              "󰢟"
+              "󱊤"
+              "󱊥"
+              "󱊦"
+            ];
+          };
+          tooltip-format = "{timeTo} ({capacity}%)";
+        };
 
         "hyprland/submap" = {
           format = ''<span style="italic">{}</span>'';
@@ -36,10 +62,34 @@
           "separate-outputs" = true;
         };
 
-        "network" = {
-          format-wifi = "{essid} ({signalStrength}% )";
-          format-ethernet = "{ifname} ";
-          format-disconnected = "";
+        "hyprland/workspaces" = {
+          format = "{icon}";
+          format-icons = {
+            active = "";
+            default = "";
+          };
+        };
+
+        network = {
+          format-wifi = "{icon}";
+          format-ethernet = "";
+          format-disconnected = "󰤭";
+
+          tooltip-format = "{ifname} ({ipaddr})";
+          tooltip-format-wifi = "{essid} ({ipaddr})";
+
+          format-icons = [
+            "󰤟"
+            "󰤢"
+            "󰤥"
+            "󰤨"
+          ];
+        };
+
+        "network#speed" = {
+          interval = 5;
+
+          format = "{bandwidthUpBytes} {bandwidthDownBytes}";
         };
 
         # "idle_inhibitor" = {
@@ -51,7 +101,7 @@
         # };
 
         tray = {
-          icon-size = 15;
+          icon-size = 30;
           spacing = 10;
         };
 
@@ -63,7 +113,7 @@
         };
 
         pulseaudio = {
-          format = "{volume}% {icon} ";
+          format = "{icon}";
           format-bluetooth = "{volume}% {icon} {format_source}";
           format-bluetooth-muted = " {icon} {format_source}";
           format-muted = "0% {icon} ";
@@ -86,7 +136,7 @@
         };
 
         "custom/power" = {
-          format = " ";
+          format = "";
           # on-click = "swaynag -t warning -m 'Power Menu Options' -b 'Logout' 'swaymsg exit' -b 'Restart' 'shutdown -r now' -b 'Shutdown'  'shutdown -h now' --background=#005566 --button-background=#009999 --button-border=#002b33 --border-bottom=#002b33";
         };
 

@@ -67,9 +67,15 @@
       url = "git+ssh://git@gitlab.com/cdorseyQ2/nix-values.git";
     };
 
-    gBar.url = "github:scorpion-26/gBar";
+    # gBar.url = "github:scorpion-26/gBar";
 
     nil.url = "github:oxalica/nil";
+
+    wezterm = {
+      url = "github:wez/wezterm?dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
+    };
   };
 
   outputs =
@@ -87,8 +93,13 @@
       colorScheme = nix-colors.colorSchemes."material-darker";
       overlays = with inputs; [
         rust-overlay.overlays.default
+        hyprland.overlays.default
         # (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; })
         (final: prev: { nil = inputs.nil.packages.${prev.system}.default; })
+        (final: prev: {
+          hyprland = inputs.hyprland.packages.${prev.system}.hyprland.override { withSystemd = true; };
+        })
+        (final: prev: { wezterm = inputs.wezterm.packages.${prev.system}.default; })
       ];
       pkgs-stable = import nixpkgs-stable { inherit system; };
       pkgs = import nixpkgs {
@@ -129,7 +140,6 @@
         system = "aarch64-darwin";
         specialArgs = {
           inherit inputs;
-          test = inputs.work-values.hello;
         };
         modules = [
           ./hosts/workMac/configuration.nix
