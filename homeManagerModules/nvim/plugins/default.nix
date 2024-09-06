@@ -4,11 +4,12 @@
     ./auto-session.nix
     ./cmp.nix
     ./conform.nix
-    ./copilot.nix
+    # ./copilot.nix
     ./lsp.nix
     ./oil.nix
     ./telescope.nix
     ./treesitter.nix
+    ./supermaven.nix
   ];
 
   programs.nixvim = {
