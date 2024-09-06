@@ -8,7 +8,7 @@
   imports = [
     nix-colors.homeManagerModules.default
     inputs.nixvim.homeManagerModules.nixvim
-    inputs.hyprland.homeManagerModules.default
+    # inputs.hyprland.homeManagerModules.default
     ../../homeManagerModules/bat.nix
     ../../homeManagerModules/cargo.nix
     ../../homeManagerModules/fzf.nix

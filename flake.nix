@@ -48,15 +48,16 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    hyprland = {
-      url = "git+https://github.com/hyprwm/Hyprland.git?submodules=1";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
-      inputs.hyprland.follows = "hyprland";
-    };
+    # hyprland = {
+    #   url = "git+https://github.com/hyprwm/Hyprland.git?submodules=1";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    #
+    # hyprland-plugins = {
+    #   url = "github:hyprwm/hyprland-plugins";
+    #   inputs.hyprland.follows = "hyprland";
+    #   inputs.nixpkgs.follows = "hyprland/nixpkgs";
+    # };
 
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
@@ -69,7 +70,11 @@
 
     # gBar.url = "github:scorpion-26/gBar";
 
-    nil.url = "github:oxalica/nil";
+    nil = {
+      url = "github:oxalica/nil";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
+    };
 
     wezterm = {
       url = "github:wez/wezterm?dir=nix";
@@ -91,25 +96,9 @@
       system = "x86_64-linux";
       root-dir = ./.;
       colorScheme = nix-colors.colorSchemes."material-darker";
-      overlays = with inputs; [
-        rust-overlay.overlays.default
-        hyprland.overlays.default
-        # (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; })
-        (final: prev: { nil = inputs.nil.packages.${prev.system}.default; })
-        (final: prev: {
-          hyprland = inputs.hyprland.packages.${prev.system}.hyprland.override { withSystemd = true; };
-        })
-        (final: prev: { wezterm = inputs.wezterm.packages.${prev.system}.default; })
-      ];
       pkgs-stable = import nixpkgs-stable { inherit system; };
-      pkgs = import nixpkgs {
-        inherit system;
-        inherit overlays;
-      };
-      darwinPackages = import nixpkgs {
-        system = "aarch64-darwin";
-        inherit overlays;
-      };
+      pkgs = import nixpkgs { inherit system; };
+      darwinPackages = import nixpkgs { system = "aarch64-darwin"; };
     in
     {
       nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
