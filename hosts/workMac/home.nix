@@ -20,7 +20,12 @@
       userName = inputs.work-values.name;
     };
 
-    zsh.plugins = [ "yarn" ];
+    zsh = {
+      plugins = [ "yarn" ];
+      shellAliases = {
+        gpsup = "git push --set-upstream origin HEAD:cdd/$(git_current_branch)";
+      };
+    };
   };
 
   programs.direnv = {

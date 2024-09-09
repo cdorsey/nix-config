@@ -25,6 +25,8 @@
 
   programs.zsh.enable = true;
 
+  security.pam.enableSudoTouchIdAuth = true;
+
   documentation.enable = false;
 
   services.nix-daemon.enable = true;

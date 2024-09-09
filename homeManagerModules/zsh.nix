@@ -29,6 +29,10 @@ in
       type = types.listOf types.str;
       default = [ ];
     };
+    shellAliases = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+    };
   };
 
   config.programs.zsh = {
@@ -56,7 +60,8 @@ in
       http = "xh";
       https = "xh -s";
       ssh = "TERM=xterm-256color ssh";
-    };
+      gcaf = "git commit --all --fixup HEAD";
+    } // cfg.shellAliases;
 
     initExtraFirst = ''
       . ${shellThemeFromScheme { scheme = config.colorScheme; }}
