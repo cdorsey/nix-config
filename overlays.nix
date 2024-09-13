@@ -1,4 +1,4 @@
-{ inputs }:
+{ inputs, config, }:
 with inputs;
 [
   rust-overlay.overlays.default
@@ -10,4 +10,5 @@ with inputs;
   # })
   (final: prev: { wezterm = wezterm.packages.${prev.system}.default; })
   (final: prev: { nerdfonts = prev.nerdfonts.override { fonts = [ "FiraCode" ]; }; })
+  (final: prev: { scripts.deploy-atlas = import ./scripts/deploy-atlas.nix { pkgs = final; inherit config; }; })
 ]

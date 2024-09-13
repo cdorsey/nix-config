@@ -19,7 +19,7 @@
     ../../nixosModules/hyprland.nix
   ];
 
-  nixpkgs.overlays = import ../../overlays.nix { inherit inputs; };
+  nixpkgs.overlays = import ../../overlays.nix { inherit inputs; inherit config; };
 
   myNixOS = {
     flakePath = "${config.users.users.chase.home}/.dotfiles";
@@ -69,6 +69,7 @@
       neovim
       signal-desktop
       nerdfonts
+      scripts.deploy-atlas
     ];
   };
 

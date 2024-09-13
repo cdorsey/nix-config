@@ -81,6 +81,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.rust-overlay.follows = "rust-overlay";
     };
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -120,6 +125,16 @@
           inherit root-dir;
         };
         modules = [ ./hosts/hermes/configuration.nix ];
+      };
+
+      nixosConfigurations.atlas = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          inherit pkgs-stable;
+          inherit root-dir;
+        };
+        modules = [ ./hosts/atlas/configuration.nix ];
       };
 
       darwinConfigurations."JNLQ1FQ95N-MBP" = nix-darwin.lib.darwinSystem {
