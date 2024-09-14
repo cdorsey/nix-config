@@ -16,7 +16,8 @@
     ../../nixosModules/firefox.nix
     ../../nixosModules/nh.nix
     ../../nixosModules/ssh.nix
-    ../../nixosModules/hyprland.nix
+    # ../../nixosModules/hyprland.nix
+    ../../nixosModules/kde.nix
   ];
 
   nixpkgs.overlays = import ../../overlays.nix { inherit inputs; inherit config; };
@@ -34,7 +35,8 @@
       nodejs
       fd
       wl-clipboard
-      hyprshot
+      # hyprshot
+      gnupg
       vim
       inputs.agenix.packages.${pkgs.system}.default
     ]

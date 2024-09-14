@@ -13,7 +13,9 @@
         json = [ "prettier" ];
         md = [ "prettier" ];
       };
-      format_on_save = { };
+      format_on_save = {
+        lsp_fallback = true;
+      };
     };
 
   };
