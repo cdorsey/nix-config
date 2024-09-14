@@ -19,6 +19,8 @@
     ../../nixosModules/hyprland.nix
   ];
 
+  nixpkgs.overlays = import ../../overlays.nix { inherit inputs; inherit config; };
+
   myNixOS = {
     flakePath = "${config.users.users.chase.home}/.dotfiles";
   };
@@ -26,21 +28,19 @@
   environment.systemPackages =
     with pkgs;
     [
-      # gnome.gnome-tweaks
-      # gnome-extension-manager
       wget
       git
       gcc
       nodejs
       fd
       wl-clipboard
+      hyprshot
       vim
       inputs.agenix.packages.${pkgs.system}.default
-
-      cifs-utils
-      wofi
     ]
     ++ [ (import (root-dir + /scripts/nixos-switch.nix) { inherit pkgs; }) ];
+
+  fonts.packages = with pkgs; [ nerdfonts ];
 
   users.users.chase = {
     isNormalUser = true;
@@ -68,6 +68,8 @@
       alacritty
       neovim
       signal-desktop
+      nerdfonts
+      scripts.deploy-atlas
     ];
   };
 
@@ -131,8 +133,10 @@
   # services.xserver.desktopManager.gnome.enable = true;
 
   services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
   };
 
   services.printing.enable = true;

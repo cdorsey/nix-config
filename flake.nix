@@ -26,23 +26,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows = "nixpkgs-stable";
-    };
-
     # https://github.com/Misterio77/nix-colors/pull/53
     nix-colors.url = "github:misterio77/nix-colors/d1a0aeae920bb10814645ba0f8489f8c74756507";
 
     zjstatus = {
       url = "github:dj95/zjstatus";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nil = {
-      url = "github:oxalica/nil";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -58,15 +48,16 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    hyprland = {
-      url = "git+https://github.com/hyprwm/Hyprland.git?submodules=1";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
-      inputs.hyprland.follows = "hyprland";
-    };
+    # hyprland = {
+    #   url = "git+https://github.com/hyprwm/Hyprland.git?submodules=1";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    #
+    # hyprland-plugins = {
+    #   url = "github:hyprwm/hyprland-plugins";
+    #   inputs.hyprland.follows = "hyprland";
+    #   inputs.nixpkgs.follows = "hyprland/nixpkgs";
+    # };
 
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
@@ -75,6 +66,25 @@
 
     work-values = {
       url = "git+ssh://git@gitlab.com/cdorseyQ2/nix-values.git";
+    };
+
+    # gBar.url = "github:scorpion-26/gBar";
+
+    nil = {
+      url = "github:oxalica/nil";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
+    };
+
+    wezterm = {
+      url = "github:wez/wezterm?dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
+    };
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -90,20 +100,10 @@
     let
       system = "x86_64-linux";
       root-dir = ./.;
-      overlays = with inputs; [
-        rust-overlay.overlays.default
-        (final: prev: { zjstatus = zjstatus.packages.${prev.system}.default; })
-        (final: prev: { nil = nil.packages.${prev.system}.default; })
-      ];
+      colorScheme = nix-colors.colorSchemes."material-darker";
       pkgs-stable = import nixpkgs-stable { inherit system; };
-      pkgs = import nixpkgs {
-        inherit system;
-        inherit overlays;
-      };
-      darwinPackages = import nixpkgs {
-        system = "aarch64-darwin";
-        inherit overlays;
-      };
+      pkgs = import nixpkgs { inherit system; };
+      darwinPackages = import nixpkgs { system = "aarch64-darwin"; };
     in
     {
       nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
@@ -127,12 +127,23 @@
         modules = [ ./hosts/hermes/configuration.nix ];
       };
 
+      nixosConfigurations.atlas = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs;
+          inherit pkgs-stable;
+          inherit root-dir;
+        };
+        modules = [ ./hosts/atlas/configuration.nix ];
+      };
+
       darwinConfigurations."JNLQ1FQ95N-MBP" = nix-darwin.lib.darwinSystem {
+        darwinPackages = darwinPackages;
+
         pkgs = darwinPackages;
         system = "aarch64-darwin";
         specialArgs = {
           inherit inputs;
-          test = inputs.work-values.hello;
         };
         modules = [
           ./hosts/workMac/configuration.nix
@@ -170,6 +181,7 @@
           inherit nix-colors;
           inherit root-dir;
           inherit pkgs-stable;
+          inherit colorScheme;
         };
         modules = [ ./hosts/hermes/home.nix ];
       };

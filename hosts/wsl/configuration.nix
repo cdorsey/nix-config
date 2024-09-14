@@ -15,7 +15,7 @@
 {
   imports = [
     inputs.vscode-server.nixosModules.default
-    inputs.sops-nix.nixosModules.sops
+    # inputs.sops-nix.nixosModules.sops
     (root-dir + /nixosModules/wsl.nix)
     ./hardware-configuration.nix
   ];
@@ -25,16 +25,16 @@
     "flakes"
   ];
 
-  sops = {
-    defaultSopsFile = root-dir + /secrets/secrets.yaml;
-    defaultSopsFormat = "yaml";
-
-    age.keyFile = "/var/secrets/age/keys.txt";
-
-    secrets = {
-      hello = { };
-    };
-  };
+  # sops = {
+  #   defaultSopsFile = root-dir + /secrets/secrets.yaml;
+  #   defaultSopsFormat = "yaml";
+  #
+  #   age.keyFile = "/var/secrets/age/keys.txt";
+  #
+  #   secrets = {
+  #     hello = { };
+  #   };
+  # };
 
   programs.nix-ld = {
     enable = true;

@@ -6,7 +6,25 @@
 }:
 let
   mkSuperBinds = map (bind: "SUPER, ${bind}");
-  terminal = lib.getExe config.programs.alacritty.package;
+  workspaceBinds = lib.lists.flatten (
+    map
+      (n: [
+        "SUPER, ${toString n}, workspace, ${toString n}"
+        "SUPER SHIFT, ${toString n}, movetoworkspace, ${toString n}"
+      ])
+      [
+        1
+        2
+        3
+        4
+        5
+        6
+        7
+        8
+        9
+      ]
+  );
+  terminal = lib.getExe config.programs.wezterm.package;
   fileManager = lib.getExe pkgs.nautilus;
   statusBar = lib.getExe config.programs.waybar.package;
   menu = lib.strings.concatStringsSep " " [
@@ -14,31 +32,46 @@ let
     "-show"
     "drun"
   ];
+  browser = lib.getExe config.programs.firefox.package;
+  screenshot = lib.getExe pkgs.hyprshot;
 in
 {
   wayland.windowManager.hyprland = {
     enable = true;
 
     settings = {
+      exec-once = [ statusBar ];
+
+      env = [ "QT_WAYLAND_DISABLE_WINDOWDECORATION,1" ];
+
       general = {
         layout = "master";
 
         gaps_in = 5;
-        gaps_out = 20;
-        border_size = 2;
-        "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
-        "col.inactive_border" = "rgba(595959aa)";
+        gaps_out = 5;
+        border_size = 1;
+        "col.active_border" = "rgba(88888888)";
+        "col.inactive_border" = "rgba(00000088)";
+
+        allow_tearing = true;
+        resize_on_border = true;
       };
 
-      exec-once = [ statusBar ];
-
-      bind = mkSuperBinds [
-        "Q, exec, ${terminal}"
-        "E, exec, ${fileManager}"
-        "SPACE, exec, ${menu}"
-        "V, togglefloating,"
-        "X, killactive,"
-      ];
+      bind =
+        mkSuperBinds [
+          "GRAVE, exec, ${terminal}"
+          "E, exec, ${fileManager}"
+          "SPACE, exec, ${menu}"
+          "B, exec, ${browser}"
+          "V, togglefloating,"
+          "Q, killactive,"
+          "S, exec, ${screenshot} -m region"
+        ]
+        ++ workspaceBinds
+        ++ [
+          "SUPER SHIFT, S, exec, ${screenshot} -m window"
+          "SUPER ALT, S, exec, ${screenshot} -m output"
+        ];
 
       bindm = mkSuperBinds [
         "mouse:272, movewindow"
@@ -49,38 +82,67 @@ in
 
       input.touchpad = {
         natural_scroll = false;
+        scroll_factor = 0.1;
       };
 
-      decoration = {
-        rounding = 10;
+      device = [
+        {
+          name = "corsair-corsair-dark-core-rgb-pro-gaming-mouse";
+          sensitivity = -0.8;
+        }
+        {
+          name = "corsair-corsair-virtuoso-xt-wireless-gaming-receiver";
+          sensitivity = -0.8;
+        }
+      ];
 
+      decoration = {
+        rounding = 16;
         blur = {
           enabled = true;
-          size = 3;
-          passes = 1;
+          brightness = 1.0;
+          contrast = 1.0;
+          noise = 1.0e-2;
+
+          vibrancy = 0.2;
+          vibrancy_darkness = 0.5;
+
+          passes = 4;
+          size = 7;
+
+          popups = true;
+          popups_ignorealpha = 0.2;
         };
 
         drop_shadow = true;
-        shadow_range = 4;
-        shadow_render_power = 3;
-        "col.shadow" = "rgba(1a1a1aee)";
+        shadow_ignore_window = true;
+        shadow_offset = "0 15";
+        shadow_range = 100;
+        shadow_render_power = 2;
+        shadow_scale = 0.97;
+        "col.shadow" = "rgba(00000055)";
       };
 
       animations = {
         enabled = true;
-
-        bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
         animation = [
-          "windows, 1, 7, myBezier"
-          "windowsOut, 1, 7, default, popin 80%"
-          "border, 1, 10, default"
-          "borderangle, 1, 8, default"
-          "fade, 1, 7, default"
-          "workspaces, 1, 6, default"
+          "border, 1, 2, default"
+          "fade, 1, 4, default"
+          "windows, 1, 3, default, popin 80%"
+          "workspaces, 1, 2, default, slide"
         ];
       };
 
       windowrulev2 = [ "suppressevent maximize, class:.*" ];
+
+      monitor = [
+        "eDP-1, preferred, auto, 1.6, vrr, 1"
+        ", preferred, auto, 1"
+      ];
+
+      xwayland.force_zero_scaling = true;
     };
+
+    xwayland.enable = true;
   };
 }

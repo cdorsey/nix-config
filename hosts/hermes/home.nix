@@ -1,21 +1,27 @@
-{ nix-colors, inputs, ... }:
+{
+  nix-colors,
+  inputs,
+  colorScheme,
+  ...
+}:
 {
   imports = [
     nix-colors.homeManagerModules.default
     inputs.nixvim.homeManagerModules.nixvim
-    inputs.hyprland.homeManagerModules.default
+    # inputs.hyprland.homeManagerModules.default
     ../../homeManagerModules/bat.nix
     ../../homeManagerModules/cargo.nix
     ../../homeManagerModules/fzf.nix
     ../../homeManagerModules/git.nix
     ../../homeManagerModules/poetry.nix
-    ../../homeManagerModules/nvim.nix
+    ../../homeManagerModules/nvim
     ../../homeManagerModules/zellij.nix
     ../../homeManagerModules/zoxide.nix
     ../../homeManagerModules/zsh.nix
     ../../homeManagerModules/syncthing.nix
     ../../homeManagerModules/jj.nix
     ../../homeManagerModules/hyprland
+    ../../homeManagerModules/wezterm.nix
   ];
 
   home.username = "chase";
@@ -23,7 +29,7 @@
 
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
-  colorScheme = nix-colors.colorSchemes.chalk;
+  colorScheme = colorScheme;
 
   userConfig = {
     git = {
