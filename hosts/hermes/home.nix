@@ -1,4 +1,5 @@
 {
+  config,
   nix-colors,
   inputs,
   colorScheme,

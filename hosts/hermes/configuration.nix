@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  root-dir,
   inputs,
   ...
 }:
@@ -20,8 +19,6 @@
     ../../nixosModules/kde.nix
   ];
 
-  nixpkgs.overlays = import ../../overlays.nix { inherit inputs; inherit config; };
-
   myNixOS = {
     flakePath = "${config.users.users.chase.home}/.dotfiles";
   };
@@ -38,9 +35,9 @@
       # hyprshot
       gnupg
       vim
-      inputs.agenix.packages.${pkgs.system}.default
+      agenix
     ]
-    ++ [ (import (root-dir + /scripts/nixos-switch.nix) { inherit pkgs; }) ];
+    ++ [ (import (../../scripts/nixos-switch.nix) { inherit pkgs; }) ];
 
   fonts.packages = with pkgs; [ nerdfonts ];
 
@@ -155,8 +152,6 @@
   };
 
   virtualisation.docker.enable = true;
-
-  nixpkgs.config.allowUnfree = true;
 
   nix.settings.experimental-features = [
     "nix-command"

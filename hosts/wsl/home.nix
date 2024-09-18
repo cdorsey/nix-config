@@ -1,7 +1,6 @@
 {
   config,
   pkgs-unstable,
-  root-dir,
   nix-colors,
   ...
 }:

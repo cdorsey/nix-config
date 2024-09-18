@@ -6,9 +6,7 @@
 # https://github.com/nix-community/NixOS-WSL
 
 {
-  config,
   pkgs,
-  root-dir,
   inputs,
   ...
 }:
@@ -16,7 +14,7 @@
   imports = [
     inputs.vscode-server.nixosModules.default
     # inputs.sops-nix.nixosModules.sops
-    (root-dir + /nixosModules/wsl.nix)
+    ../../nixosModules/wsl.nix
     ./hardware-configuration.nix
   ];
 
@@ -75,7 +73,7 @@
         nixfmt-rfc-style
         jujutsu
       ]
-      ++ [ (import (root-dir + /scripts/nixos-switch.nix) { inherit pkgs; }) ];
+      ++ [ (import ../../scripts/nixos-switch.nix { inherit pkgs; }) ];
   };
 
   users = {
