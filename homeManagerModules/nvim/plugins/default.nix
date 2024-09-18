@@ -25,7 +25,7 @@
       enable = true;
 
       settings = {
-        floating_window_use_plenary = true;
+        floating_window_use_plenary = 1;
       };
     };
 
@@ -48,7 +48,7 @@
       enable = true;
     };
 
-    plugins.surround = {
+    plugins.vim-surround = {
       enable = true;
     };
 
