@@ -8,21 +8,21 @@
 {
   imports = [
     nix-colors.homeManagerModules.default
-    inputs.nixvim.homeManagerModules.nixvim
     # inputs.hyprland.homeManagerModules.default
+    # ../../homeManagerModules/alacritty.nix
     ../../homeManagerModules/bat.nix
     ../../homeManagerModules/cargo.nix
     ../../homeManagerModules/fzf.nix
     ../../homeManagerModules/git.nix
-    ../../homeManagerModules/poetry.nix
+    # ../../homeManagerModules/hyprland
+    ../../homeManagerModules/jj.nix
     ../../homeManagerModules/nvim
+    ../../homeManagerModules/poetry.nix
+    ../../homeManagerModules/syncthing.nix
+    ../../homeManagerModules/wezterm.nix
     ../../homeManagerModules/zellij.nix
     ../../homeManagerModules/zoxide.nix
     ../../homeManagerModules/zsh.nix
-    ../../homeManagerModules/syncthing.nix
-    ../../homeManagerModules/jj.nix
-    ../../homeManagerModules/hyprland
-    ../../homeManagerModules/wezterm.nix
   ];
 
   home.username = "chase";
@@ -44,38 +44,6 @@
 
     enableZshIntegration = true;
     nix-direnv.enable = true;
-  };
-
-  programs.alacritty = {
-    enable = true;
-
-    settings = {
-      font = {
-        normal = {
-          family = "FiraMono Nerd Font Mono";
-          style = "Regular";
-        };
-
-        size = 12;
-      };
-
-      window = {
-        padding = {
-          x = 3;
-          y = 3;
-        };
-        position = {
-          x = 900;
-          y = 350;
-        };
-        dimensions = {
-          lines = 40;
-          columns = 125;
-        };
-        # dynamic_padding = true;
-        opacity = 0.9;
-      };
-    };
   };
 
   # Let Home Manager install and manage itself.

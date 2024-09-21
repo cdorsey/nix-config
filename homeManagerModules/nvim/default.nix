@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ inputs, ... }:
 let
   nmap = key: action: options: {
     key = key;
@@ -14,7 +14,10 @@ let
   };
 in
 {
-  imports = [ ./plugins ];
+  imports = [
+    inputs.nixvim.homeManagerModules.nixvim
+    ./plugins
+  ];
 
   programs.nixvim = {
     enable = true;
