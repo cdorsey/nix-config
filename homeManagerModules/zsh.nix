@@ -1,9 +1,9 @@
 {
+  self,
   lib,
   config,
   pkgs,
   nix-colors,
-  root-dir,
   ...
 }:
 with lib;
@@ -46,7 +46,7 @@ in
       enable = cfg.enableOMZ;
 
       theme = "custom";
-      custom = "${root-dir}/oh-my-zsh";
+      custom = "${self}/oh-my-zsh";
       plugins = [
         "git"
         "node"

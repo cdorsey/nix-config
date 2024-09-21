@@ -2,9 +2,10 @@
   description = "Nixos config flake";
 
   inputs = {
-    nixpkgs-stable.url = "nixpkgs/nixos-23.11";
-
+    ### MAIN ###
     nixpkgs.url = "nixpkgs/nixos-unstable";
+
+    nixpkgs-stable.url = "nixpkgs/nixos-23.11";
 
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -21,19 +22,38 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    vscode-server = {
-      url = "github:nix-community/nixos-vscode-server";
+    ### PERSIONAL ###
+    work-values = {
+      url = "git+ssh://git@gitlab.com/cdorseyQ2/nix-values.git";
+    };
+
+    ### OTHER ###
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
+    disko = {
+      url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # gBar.url = "github:scorpion-26/gBar";
+
+    # hyprland = {
+    #   url = "git+https://github.com/hyprwm/Hyprland.git?submodules=1";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+
+    # hyprland-plugins = {
+    #   url = "github:hyprwm/hyprland-plugins";
+    #   inputs.hyprland.follows = "hyprland";
+    #   inputs.nixpkgs.follows = "hyprland/nixpkgs";
+    # };
 
     # https://github.com/Misterio77/nix-colors/pull/53
     nix-colors.url = "github:misterio77/nix-colors/d1a0aeae920bb10814645ba0f8489f8c74756507";
-
-    zjstatus = {
-      url = "github:dj95/zjstatus";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
@@ -42,49 +62,26 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    agenix = {
-      url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
-
-    # hyprland = {
-    #   url = "git+https://github.com/hyprwm/Hyprland.git?submodules=1";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-    #
-    # hyprland-plugins = {
-    #   url = "github:hyprwm/hyprland-plugins";
-    #   inputs.hyprland.follows = "hyprland";
-    #   inputs.nixpkgs.follows = "hyprland/nixpkgs";
-    # };
-
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    work-values = {
-      url = "git+ssh://git@gitlab.com/cdorseyQ2/nix-values.git";
-    };
-
-    # gBar.url = "github:scorpion-26/gBar";
-
     nil = {
       url = "github:oxalica/nil";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.rust-overlay.follows = "rust-overlay";
     };
 
-    wezterm = {
-      url = "github:wez/wezterm?dir=nix";
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "rust-overlay";
     };
 
-    disko = {
-      url = "github:nix-community/disko";
+    vscode-server = {
+      url = "github:nix-community/nixos-vscode-server";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    zjstatus = {
+      url = "github:dj95/zjstatus/v0.17.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
   };
 
@@ -99,42 +96,49 @@
     }@inputs:
     let
       system = "x86_64-linux";
-      root-dir = ./.;
       colorScheme = nix-colors.colorSchemes."material-darker";
       pkgs-stable = import nixpkgs-stable { inherit system; };
-      pkgs = import nixpkgs { inherit system; };
       darwinPackages = import nixpkgs { system = "aarch64-darwin"; };
     in
     {
-      nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
-        inherit pkgs;
+      nixosConfigurations.atlas = nixpkgs.lib.nixosSystem {
         inherit system;
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = import ./overlays.nix {
+            inherit inputs;
+          };
+        };
         specialArgs = {
           inherit inputs;
           inherit pkgs-stable;
-          inherit root-dir;
         };
-        modules = [ ./hosts/wsl/configuration.nix ];
+        modules = [ ./hosts/atlas/configuration.nix ];
       };
 
       nixosConfigurations.hermes = nixpkgs.lib.nixosSystem {
         inherit system;
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = import ./overlays.nix {
+            inherit inputs;
+          };
+        };
         specialArgs = {
           inherit inputs;
           inherit pkgs-stable;
-          inherit root-dir;
         };
         modules = [ ./hosts/hermes/configuration.nix ];
       };
 
-      nixosConfigurations.atlas = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
         inherit system;
+        pkgs = import nixpkgs-stable { inherit system; };
         specialArgs = {
           inherit inputs;
           inherit pkgs-stable;
-          inherit root-dir;
         };
-        modules = [ ./hosts/atlas/configuration.nix ];
+        modules = [ ./hosts/wsl/configuration.nix ];
       };
 
       darwinConfigurations."JNLQ1FQ95N-MBP" = nix-darwin.lib.darwinSystem {
@@ -157,29 +161,32 @@
             home-manager.extraSpecialArgs = {
               inherit inputs;
               inherit nix-colors;
-              inherit root-dir;
             };
           }
         ];
       };
 
-      homeConfigurations.nixos = inputs.home-manager.lib.homeManagerConfiguration {
+      homeConfigurations."nixos@wsl" = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs-stable;
 
         extraSpecialArgs = {
           inherit nix-colors;
-          inherit root-dir;
-          pkgs-unstable = pkgs;
         };
         modules = [ ./hosts/wsl/home.nix ];
       };
 
       homeConfigurations."chase@hermes" = inputs.home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+          overlays = import ./overlays.nix {
+            inherit inputs;
+          };
+        };
         extraSpecialArgs = {
+          inherit self;
           inherit inputs;
           inherit nix-colors;
-          inherit root-dir;
           inherit pkgs-stable;
           inherit colorScheme;
         };

@@ -137,6 +137,7 @@ in
 
       monitor = [
         "eDP-1, preferred, auto, 1.6, vrr, 1"
+        "DP-2, preferred, auto, 1, vrr, 1"
         ", preferred, auto, 1"
       ];
 

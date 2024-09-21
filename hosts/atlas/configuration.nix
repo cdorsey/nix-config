@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+let
+  asHours = days: toString (days * 24) + "h";
+in
 {
   imports = [
     inputs.disko.nixosModules.disko
@@ -73,6 +76,16 @@
             answer = "192.168.1.9";
           }
         ];
+      };
+
+      querylog = {
+        enabled = true;
+        interval = asHours 7;
+      };
+
+      statistics = {
+        enabled = true;
+        interval = "24h";
       };
 
       users = [

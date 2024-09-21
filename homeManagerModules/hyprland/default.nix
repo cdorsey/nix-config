@@ -6,6 +6,6 @@
     # ./gbar.nix
     ./rofi.nix
     ./hyprlock.nix
-    ./hyprcursor.nix
+    # ./hyprcursor.nix
   ];
 }

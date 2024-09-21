@@ -24,7 +24,7 @@
         installCargo = false;
       };
       tailwindcss.enable = true;
-      tsserver = {
+      ts-ls = {
         enable = true;
 
         extraOptions = {

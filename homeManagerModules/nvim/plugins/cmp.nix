@@ -27,11 +27,12 @@
     };
 
     settings = {
-      sources = [
-        { name = "nvim_lsp"; }
-        { name = "luasnip"; }
-        { name = "path"; }
-        { name = "buffer"; }
+      sources = map (name: { inherit name; }) [
+        "supermaven"
+        "nvim_lsp"
+        "luasnip"
+        "path"
+        "buffer"
       ];
       snippet.expand = # lua
         ''
