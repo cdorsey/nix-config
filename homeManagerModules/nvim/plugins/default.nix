@@ -5,11 +5,13 @@
     ./cmp.nix
     ./conform.nix
     # ./copilot.nix
+    ./harpoon.nix
     ./lsp.nix
+    ./lspkind.nix
     ./oil.nix
+    ./supermaven.nix
     ./telescope.nix
     ./treesitter.nix
-    ./supermaven.nix
   ];
 
   programs.nixvim = {

@@ -18,6 +18,7 @@
     ../../homeManagerModules/jj.nix
     ../../homeManagerModules/nvim
     ../../homeManagerModules/poetry.nix
+    ../../homeManagerModules/starship
     ../../homeManagerModules/syncthing.nix
     ../../homeManagerModules/wezterm.nix
     ../../homeManagerModules/zellij.nix

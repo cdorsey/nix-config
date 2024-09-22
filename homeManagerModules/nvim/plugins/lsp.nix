@@ -1,4 +1,9 @@
-{ ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   programs.nixvim.plugins.lsp = {
     enable = true;
@@ -28,6 +33,15 @@
         enable = true;
 
         extraOptions = {
+          init_options = {
+            plugins = [
+              {
+                name = "@vue/typescript-plugin";
+                location = "${config.programs.nixvim.plugins.lsp.servers.volar.package}";
+                languages = [ "vue" ];
+              }
+            ];
+          };
           commands = {
             OrganizeImports.__raw = ''
               {
@@ -47,7 +61,15 @@
         };
       };
 
-      volar.enable = true;
+      volar = {
+        enable = true;
+
+        extraOptions = {
+          init_options = {
+            vue.hybridMode = false;
+          };
+        };
+      };
 
       cssls.enable = true;
     };

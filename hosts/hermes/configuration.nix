@@ -15,12 +15,22 @@
     ../../nixosModules/firefox.nix
     ../../nixosModules/nh.nix
     ../../nixosModules/ssh.nix
+    ../../nixosModules/starship.nix
     # ../../nixosModules/hyprland.nix
     ../../nixosModules/kde.nix
   ];
 
   myNixOS = {
     flakePath = "${config.users.users.chase.home}/.dotfiles";
+  };
+
+  nixpkgs.overlays = import ../../overlays.nix {
+    inherit inputs;
+    inherit config;
+  };
+
+  nixpkgs.config = {
+    allowUnfree = true;
   };
 
   environment.systemPackages =
@@ -68,7 +78,7 @@
       neovim
       signal-desktop
       nerdfonts
-      scripts.deploy-atlas
+      # scripts.deploy-atlas
     ];
   };
 

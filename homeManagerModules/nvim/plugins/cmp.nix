@@ -40,9 +40,19 @@
             require('luasnip').lsp_expand(args.body)
           end
         '';
+      window = {
+        completion = {
+          border = "rounded";
+          winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None";
+        };
+        documentation = {
+          border = "rounded";
+          winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None";
+        };
+      };
       mapping = {
         "<C-Space>" = "cmp.mapping.complete()";
-        "<CR>" = "cmp.mapping.confirm({ select = true })";
+        "<CR>" = "cmp.mapping.confirm({ select = false })";
         "<S-Tab>" = "cmp.mapping(cmp.mapping.select_prev_item(), {'i', 's'})";
         "<Tab>" = "cmp.mapping(cmp.mapping.select_next_item(), {'i', 's'})";
       };
