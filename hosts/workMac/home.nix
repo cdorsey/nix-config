@@ -1,4 +1,10 @@
-{ colorScheme, inputs, ... }:
+{
+  lib,
+  colorScheme,
+  inputs,
+  pkgs,
+  ...
+}:
 {
   imports = [
     inputs.nix-colors.homeManagerModules.default
@@ -22,9 +28,14 @@
 
     zsh = {
       plugins = [ "yarn" ];
-      shellAliases = {
-        gpsup = "git push --set-upstream origin HEAD:cdd/$(git_current_branch)";
-      };
+      shellAliases =
+        let
+          inherit (lib) getExe;
+        in
+        with pkgs;
+        {
+          gpsup = "${getExe git} push --set-upstream origin HEAD:cdd/$(git_current_branch)";
+        };
     };
   };
 

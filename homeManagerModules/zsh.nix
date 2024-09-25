@@ -56,14 +56,17 @@ in
     };
 
     shellAliases =
+      let
+        inherit (lib) getExe;
+      in
       with pkgs;
       {
         cat = "${getExe bat} -pp";
         ls = "${getExe eza}";
-        http = "${xh}/bin/xh";
-        https = "${xh}/bin/xhs";
-        gcaf = "${getExe git} commit --all --fixup HEAD";
+        http = "${getExe xh}";
+        https = "${getExe xh} -s";
         ssh = "TERM=xterm-256color ssh";
+        gcaf = "${getExe git} log -n 50 --pretty=format:'%h %s' --no-merges | ${getExe fzf} | cut -c -7 | xargs -o ${getExe git} commit --all --fixup";
       }
       // cfg.shellAliases;
 
