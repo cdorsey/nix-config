@@ -1,5 +1,9 @@
-{ ... }:
-{
+{ config, lib, ... }:
+let
+  inherit (lib) mkIf;
+  cfg = config.userConfig.starship;
+in
+mkIf cfg.useNerdFont {
   programs.starship.settings =
     builtins.fromTOML # toml
       ''

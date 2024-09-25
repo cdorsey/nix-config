@@ -63,8 +63,8 @@ in
       {
         cat = "${getExe bat} -pp";
         ls = "${getExe eza}";
-        http = "${getExe xh}";
-        https = "${getExe xh} -s";
+        http = "${xh}/bin/xh";
+        https = "${xh}/bin/xhs";
         ssh = "TERM=xterm-256color ssh";
         gcaf = "${getExe git} log -n 50 --pretty=format:'%h %s' --no-merges | ${getExe fzf} | cut -c -7 | xargs -o ${getExe git} commit --all --fixup";
       }

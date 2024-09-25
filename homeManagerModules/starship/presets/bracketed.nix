@@ -1,5 +1,9 @@
-{ ... }:
-{
+{ config, lib, ... }:
+let
+  inherit (lib) mkIf;
+  cfg = config.userConfig.starship;
+in
+mkIf cfg.useBracketed {
   programs.starship.settings =
     builtins.fromTOML # toml
       ''
@@ -148,7 +152,7 @@
         format = '\[[$symbol($version)]($style)\]'
 
         [python]
-        format = '\[[$${symbol}$${pyenv_prefix}($${version})(\($virtualenv\))]($style)\]'
+        format = '\[[''${symbol}''${pyenv_prefix}(''${version})(\($virtualenv\))]($style)\]'
 
         [raku]
         format = '\[[$symbol($version-$vm_version)]($style)\]'

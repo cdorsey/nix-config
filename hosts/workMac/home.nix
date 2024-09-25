@@ -27,6 +27,11 @@
       userName = inputs.work-values.name;
     };
 
+    starship = {
+      useNerdFont = false;
+      disableModules = [ "docker_context" ];
+    };
+
     zsh = {
       plugins = [ "yarn" ];
       shellAliases =
