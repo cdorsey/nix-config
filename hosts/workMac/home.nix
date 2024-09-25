@@ -9,13 +9,14 @@
   imports = [
     inputs.nix-colors.homeManagerModules.default
     ../../homeManagerModules/bat.nix
-    ../../homeManagerModules/zsh.nix
-    ../../homeManagerModules/git.nix
     ../../homeManagerModules/cargo.nix
     ../../homeManagerModules/fzf.nix
+    ../../homeManagerModules/git.nix
+    ../../homeManagerModules/starship
+    ../../homeManagerModules/vim.nix
     ../../homeManagerModules/zellij.nix
     ../../homeManagerModules/zoxide.nix
-    ../../homeManagerModules/vim.nix
+    ../../homeManagerModules/zsh.nix
   ];
 
   colorScheme = colorScheme;

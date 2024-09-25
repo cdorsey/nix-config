@@ -98,16 +98,13 @@
       system = "x86_64-linux";
       colorScheme = nix-colors.colorSchemes."material-darker";
       pkgs-stable = import nixpkgs-stable { inherit system; };
-      darwinPackages = import nixpkgs { system = "aarch64-darwin"; };
     in
     {
       nixosConfigurations.atlas = nixpkgs.lib.nixosSystem {
         inherit system;
         pkgs = import nixpkgs {
           inherit system;
-          overlays = import ./overlays.nix {
-            inherit inputs;
-          };
+          overlays = import ./overlays.nix { inherit inputs; };
         };
         specialArgs = {
           inherit inputs;
@@ -136,30 +133,39 @@
         modules = [ ./hosts/wsl/configuration.nix ];
       };
 
-      darwinConfigurations."JNLQ1FQ95N-MBP" = nix-darwin.lib.darwinSystem {
-        darwinPackages = darwinPackages;
-
-        pkgs = darwinPackages;
-        system = "aarch64-darwin";
-        specialArgs = {
-          inherit inputs;
-        };
-        modules = [
-          ./hosts/workMac/configuration.nix
-          inputs.home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.users.cdorsey = import ./hosts/workMac/home.nix;
-
-            home-manager.extraSpecialArgs = {
+      darwinConfigurations."JNLQ1FQ95N-MBP" =
+        let
+          system = "aarch64-darwin";
+        in
+        nix-darwin.lib.darwinSystem {
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = import ./overlays.nix {
               inherit inputs;
-              inherit nix-colors;
+              config = self;
             };
-          }
-        ];
-      };
+          };
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+          };
+          modules = [
+            ./hosts/workMac/configuration.nix
+            inputs.home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+              home-manager.users.cdorsey = import ./hosts/workMac/home.nix;
+
+              home-manager.extraSpecialArgs = {
+                inherit inputs;
+                inherit nix-colors;
+                inherit colorScheme;
+              };
+            }
+          ];
+        };
 
       homeConfigurations."nixos@wsl" = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs-stable;
