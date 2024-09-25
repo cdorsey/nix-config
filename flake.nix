@@ -118,12 +118,7 @@
 
       nixosConfigurations.hermes = nixpkgs.lib.nixosSystem {
         inherit system;
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = import ./overlays.nix {
-            inherit inputs;
-          };
-        };
+        # pkgs = nixpkgs.legacyPackages.${system};
         specialArgs = {
           inherit inputs;
           inherit pkgs-stable;
@@ -181,6 +176,7 @@
           config.allowUnfree = true;
           overlays = import ./overlays.nix {
             inherit inputs;
+            config = self;
           };
         };
         extraSpecialArgs = {

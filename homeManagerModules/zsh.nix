@@ -9,6 +9,7 @@
 with lib;
 let
   inherit (nix-colors.lib-contrib { inherit pkgs; }) shellThemeFromScheme;
+  inherit lib getExe;
   cfg = config.userConfig.zsh;
 in
 {
@@ -45,8 +46,8 @@ in
     oh-my-zsh = {
       enable = cfg.enableOMZ;
 
-      theme = "custom";
-      custom = "${self}/oh-my-zsh";
+      # theme = "custom";
+      # custom = "${self}/oh-my-zsh";
       plugins = [
         "git"
         "node"
@@ -54,14 +55,17 @@ in
       ] ++ cfg.plugins;
     };
 
-    shellAliases = {
-      cat = "bat -pp";
-      ls = "exa";
-      http = "xh";
-      https = "xh -s";
-      ssh = "TERM=xterm-256color ssh";
-      gcaf = "git commit --all --fixup HEAD";
-    } // cfg.shellAliases;
+    shellAliases =
+      with pkgs;
+      {
+        cat = "${getExe bat} -pp";
+        ls = "${getExe eza}";
+        http = "${xh}/bin/xh";
+        https = "${xh}/bin/xhs";
+        gcaf = "${getExe git} commit --all --fixup HEAD";
+        ssh = "TERM=xterm-256color ssh";
+      }
+      // cfg.shellAliases;
 
     initExtraFirst = ''
       . ${shellThemeFromScheme { scheme = config.colorScheme; }}
