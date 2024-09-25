@@ -9,21 +9,21 @@
   imports = [
     nix-colors.homeManagerModules.default
     # inputs.hyprland.homeManagerModules.default
-    # ../../homeManagerModules/alacritty.nix
-    ../../homeManagerModules/bat.nix
-    ../../homeManagerModules/cargo.nix
-    ../../homeManagerModules/fzf.nix
-    ../../homeManagerModules/git.nix
+    # ../../homeManagerModules/alacritty
+    ../../homeManagerModules/bat
+    ../../homeManagerModules/cargo
+    ../../homeManagerModules/fzf
+    ../../homeManagerModules/git
     # ../../homeManagerModules/hyprland
-    ../../homeManagerModules/jj.nix
+    ../../homeManagerModules/jj
     ../../homeManagerModules/nvim
-    ../../homeManagerModules/poetry.nix
+    ../../homeManagerModules/poetry
     ../../homeManagerModules/starship
-    ../../homeManagerModules/syncthing.nix
-    ../../homeManagerModules/wezterm.nix
-    ../../homeManagerModules/zellij.nix
-    ../../homeManagerModules/zoxide.nix
-    ../../homeManagerModules/zsh.nix
+    ../../homeManagerModules/syncthing
+    ../../homeManagerModules/wezterm
+    ../../homeManagerModules/zellij
+    ../../homeManagerModules/zoxide
+    ../../homeManagerModules/zsh
   ];
 
   home.username = "chase";

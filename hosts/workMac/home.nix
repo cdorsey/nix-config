@@ -8,15 +8,15 @@
 {
   imports = [
     inputs.nix-colors.homeManagerModules.default
-    ../../homeManagerModules/bat.nix
-    ../../homeManagerModules/cargo.nix
-    ../../homeManagerModules/fzf.nix
-    ../../homeManagerModules/git.nix
+    ../../homeManagerModules/bat
+    ../../homeManagerModules/cargo
+    ../../homeManagerModules/fzf
+    ../../homeManagerModules/git
     ../../homeManagerModules/starship
-    ../../homeManagerModules/vim.nix
-    ../../homeManagerModules/zellij.nix
-    ../../homeManagerModules/zoxide.nix
-    ../../homeManagerModules/zsh.nix
+    ../../homeManagerModules/vim
+    ../../homeManagerModules/zellij
+    ../../homeManagerModules/zoxide
+    ../../homeManagerModules/zsh
   ];
 
   colorScheme = colorScheme;
